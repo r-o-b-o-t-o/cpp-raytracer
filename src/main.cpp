@@ -1,9 +1,12 @@
 #include <vector>
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
+#include <boost/filesystem.hpp>
+#include <yaml-cpp/yaml.h>
 
 using namespace cv;
 using namespace std;
+//namespace fs = std::filesystem;
 
 void createAlphaMat(Mat &mat) {
     for (int i = 0; i < mat.rows; ++i) {
@@ -17,9 +20,9 @@ void createAlphaMat(Mat &mat) {
     }
 }
 
-int main(int argv, char** argc) {
+void exportImage(int height, int width) {
     // Create mat with alpha channel
-    Mat mat(480, 640, CV_8UC4);
+    Mat mat(height, width, CV_8UC4);
     createAlphaMat(mat);
 
     vector<int> compression_params;
@@ -31,9 +34,41 @@ int main(int argv, char** argc) {
     }
     catch (runtime_error &ex) {
         fprintf(stderr, "Exception converting image to PNG format: %s\n", ex.what());
-        return 1;
+        return;
+    }
+    fprintf(stdout, "Saved PNG file with alpha data.\n");
+}
+
+void useScene(std::string scene){
+    YAML::Node config = YAML::LoadFile(scene);
+    std::string sceneName = config["name"].as<std::string>();
+    std::cout << "Using scene: " << sceneName << std::endl;
+    YAML::Node resolution = config["resolution"];
+    exportImage(resolution["height"].as<int>(), resolution["width"].as<int>());
+}
+
+int main(int argv, char** argc) {
+    std::vector<std::string> scenes;
+    std::string path = "../scenes/";
+    for (auto& entry : boost::filesystem::directory_iterator(path))
+        scenes.push_back(entry.path().string());
+
+    std::cout << "Choose a scene:\n" << std::endl;
+    int i = 1;
+    for (auto it = scenes.begin(); it != scenes.end(); ++it)
+    {
+        std::string name = YAML::LoadFile(*it)["name"].as<std::string>();
+        std::cout << i << ") " <<  name << std::endl;
+        ++i;
     }
 
-    fprintf(stdout, "Saved PNG file with alpha data.\n");
+    int choice;
+    std::cout << std::endl << "Your choice: ";
+    std::cin >> choice;
+
+    if (choice <= 0 || choice > scenes.size())
+        std::cout << "Exiting..." << std::endl;
+    else
+        useScene(scenes[choice-1]);
     return 0;
 }

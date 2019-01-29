@@ -1,0 +1,12 @@
+name: "Second scene 1080p"
+resolution: 
+  width: 1920
+  height: 1080
+light: 
+  x: 0
+  y: 0
+  z: 0
+camera:
+  x: 0
+  y: 0
+  z: 0
