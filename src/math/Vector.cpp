@@ -15,7 +15,7 @@ namespace Math {
         for (float value : this->values) {
             sum += powf(value, 2.0f);
         }
-        return std::sqrt(sum);
+        return sqrt(sum);
     }
 
     void Vector::normalize() {
