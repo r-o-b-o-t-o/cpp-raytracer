@@ -4,11 +4,14 @@
 #include <ostream>
 
 namespace Math {
+    class Vector; // Forward declaration
+
     class Point {
     public:
         Point();
         Point(float x, float y, float z);
         Point(const Point &p);
+        explicit Point(const Vector &v);
 
         float dot(const Point &other);
 
@@ -35,7 +38,7 @@ namespace Math {
         void y(float val);
         void z(float val);
 
-    private:
+    protected:
         float values[3];
     };
 }

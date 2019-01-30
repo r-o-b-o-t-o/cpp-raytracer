@@ -35,7 +35,7 @@ void exportImage(int height, int width) {
     fprintf(stdout, "Saved PNG file with alpha data.\n");
 }
 
-void useScene(const std::string &scene){
+void useScene(const std::string &scene) {
     YAML::Node config = YAML::LoadFile(scene);
     std::string sceneName = config["name"].as<std::string>();
     std::cout << "Using scene: " << sceneName << std::endl;

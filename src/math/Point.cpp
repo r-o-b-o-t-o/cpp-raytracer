@@ -91,7 +91,7 @@ namespace Math {
     }
 
     Point &Point::operator/=(const float &mul) {
-        *this *= (1 / mul);
+        *this *= (1.0f / mul);
         return *this;
     }
 
