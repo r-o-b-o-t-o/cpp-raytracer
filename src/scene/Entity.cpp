@@ -2,6 +2,29 @@
 #include "Entity.hpp"
 
 namespace Scene {
+
+	Entity::Entity(): pos(Math::Point()),
+	trans(Math::Matrix(4, 4, 0)),
+	transInv(Math::Matrix(4, 4, 0)) {
+	}
+
+	Entity::Entity(Math::Point point):
+	trans(Math::Matrix(4, 4, 0)),
+	transInv(Math::Matrix(4, 4, 0)) {
+		this->pos = point;
+	}
+
+	void Entity::setPos(Math::Point point){
+		this->pos = point;
+	}
+
+	void Entity::setPos(float x, float y, float z){
+		this->pos = Math::Point(x,y,z);
+	}
+
+	Math::Point Entity::getPos() {
+		return this->pos;
+	}
 	// effectue une translation de vecteur (x,y,z)
 	void Entity::translate(float x, float y, float z){
 		Math::Matrix mat = Math::Matrix(4, 4, 0);
