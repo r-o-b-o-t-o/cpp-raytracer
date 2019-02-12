@@ -1,9 +1,9 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
-#include "Point.hpp"
-#include "Ray.hpp"
-#include "Matrix.hpp"
+#include "math/Point.hpp"
+#include "math/Ray.hpp"
+#include "math/Matrix.hpp"
 
 namespace Scene {
     class Entity {

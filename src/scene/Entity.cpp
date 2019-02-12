@@ -1,5 +1,5 @@
 #include <math.h>
-#include "Entity.hpp"
+#include "scene/Entity.hpp"
 
 namespace Scene {
 

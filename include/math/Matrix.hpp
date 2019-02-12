@@ -1,14 +1,27 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
+#include "math/HPoint.hpp"
+#include "math/HVector.hpp"
+
 namespace Math {
     class Matrix {
     public:
-        Matrix(int rows, int cols, float defaultValue = 1.0f);
+        explicit Matrix(int size = 4);
+        Matrix(int rows, int cols, float defaultValue = 0.0f);
         Matrix(const Matrix &m);
         ~Matrix();
 
         Matrix& operator=(Matrix other);
+        Matrix operator*(const Matrix &rhs) const;
+        Matrix& operator*=(const Matrix &other);
+        Matrix operator*(const float &rhs) const;
+        Matrix& operator*=(const float &rhs);
+        Matrix operator*(const HPoint &rhs) const;
+        Matrix& operator*=(const HPoint &rhs);
+        Matrix operator*(const HVector &rhs) const;
+        Matrix& operator*=(const HVector &rhs);
+        Matrix operator-() const;
         float& operator[](int);
         const float& operator[](int) const;
         float& operator()(int, int);

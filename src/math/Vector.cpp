@@ -1,5 +1,5 @@
 #include <math.h>
-#include "Vector.hpp"
+#include "math/Vector.hpp"
 
 namespace Math {
     Vector::Vector() : Point() { }

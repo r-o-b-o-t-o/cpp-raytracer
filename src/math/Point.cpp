@@ -1,4 +1,4 @@
-#include "Point.hpp"
+#include "math/Point.hpp"
 
 namespace Math {
     Point::Point() {

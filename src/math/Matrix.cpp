@@ -1,25 +1,28 @@
-#include <cmath>
-
-#include "Matrix.hpp"
+#include "math/Matrix.hpp"
 
 #include <cmath>
 #include <iomanip>
 #include <iostream>
-#include <stdexcept>
 
 namespace Math {
-    Matrix::Matrix(int rows, int cols, float defaultValue) {
-        this->rows = rows;
-        this->cols = cols;
+    Matrix::Matrix(int size) : Matrix(size, size, 0.0f) {
+        for (auto i = 0; i < size; i++) {
+            this->at(i, i) = 1.0f;
+        }
+    }
+
+    Matrix::Matrix(int rows, int cols, float defaultValue)
+            : rows(rows),
+              cols(cols) {
         this->data = new float[rows * cols];
         for (auto i = 0; i < rows * cols; i++) {
             this->data[i] = defaultValue;
         }
     }
 
-    Matrix::Matrix(const Matrix &m) {
-        this->rows = m.rows;
-        this->cols = m.cols;
+    Matrix::Matrix(const Matrix &m)
+            : rows(m.rows),
+              cols(m.cols) {
         this->data = new float[this->rows * this->cols];
         for (auto i = 0; i < this->rows * this->cols; i++) {
             this->data[i] = m.data[i];
@@ -39,6 +42,88 @@ namespace Math {
     Matrix &Matrix::operator=(Matrix other) {
         swap(*this, other);
         return *this;
+    }
+
+    Matrix Matrix::operator*(const Matrix &rhs) const {
+        Matrix m(*this);
+        m *= rhs;
+        return m;
+    }
+
+    Matrix &Matrix::operator*=(const Matrix &other) {
+        Matrix m(this->rows, other.cols);
+        for (int i = 0; i < m.rows; ++i) {
+            for (int j = 0; j < m.cols; ++j) {
+                float val = 0.0f;
+                for (int k = 0; k < this->cols; ++k) {
+                    val += this->at(i, k) * other.at(k, j);
+                }
+                m.at(i, j) = val;
+            }
+        }
+
+        this->freeArray();
+        this->rows = m.rows;
+        this->cols = m.cols;
+        this->data = new float[m.rows * m.cols];
+        for (int i = 0; i < m.rows * m.cols; ++i) {
+            this->data[i] = m.data[i];
+        }
+
+        return *this;
+    }
+
+    Matrix Matrix::operator*(const float &rhs) const {
+        Matrix m(*this);
+        m *= rhs;
+        return m;
+    }
+
+    Matrix &Matrix::operator*=(const float &rhs) {
+        for (int i = 0; i < this->rows; ++i) {
+            this->multiplyRow(i, rhs);
+        }
+        return *this;
+    }
+
+    Matrix Matrix::operator*(const HPoint &rhs) const {
+        Matrix m(*this);
+        m *= rhs;
+        return m;
+    }
+
+    Matrix &Matrix::operator*=(const HPoint &rhs) {
+        Matrix m(4, 1);
+        m(0, 0) = rhs.x();
+        m(0, 1) = rhs.y();
+        m(0, 2) = rhs.z();
+        m(0, 3) = rhs.w();
+        this->operator*=(m);
+
+        return *this;
+    }
+
+    Matrix Matrix::operator*(const HVector &rhs) const {
+        Matrix m(*this);
+        m *= rhs;
+        return m;
+    }
+
+    Matrix &Matrix::operator*=(const HVector &rhs) {
+        Matrix m(4, 1);
+        m(0, 0) = rhs.x();
+        m(0, 1) = rhs.y();
+        m(0, 2) = rhs.z();
+        m(0, 3) = rhs.w();
+        this->operator*=(m);
+
+        return *this;
+    }
+
+    Matrix Matrix::operator-() const {
+        Matrix m(*this);
+        m *= -1.0f;
+        return m;
     }
 
     float &Matrix::operator[](const int index) {
@@ -112,12 +197,14 @@ namespace Math {
     }
 
     Matrix Matrix::inverse() const {
+        // Create an augmented matrix
         Matrix m(this->rows, this->cols * 2, 0.0f);
         for (int i = 0; i < this->rows; ++i) {
             for (int j = 0; j < this->cols; ++j) {
                 m(i, j) = this->get(i, j);
             }
         }
+        // Identity matrix for the augmented side
         for (int i = 0; i < this->rows; ++i) {
             m(i, this->cols + i) = 1.0f;
         }
@@ -147,6 +234,7 @@ namespace Math {
             }
         }
 
+        // Get augmented part as a matrix
         Matrix result(this->rows, this->cols);
         for (int i = 0; i < this->rows; ++i) {
             for (int j = 0; j < this->cols; ++j) {
