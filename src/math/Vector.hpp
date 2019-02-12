@@ -8,7 +8,7 @@ namespace Math {
     public:
         Vector();
         Vector(float x, float y, float z);
-        Vector(const Vector &v);
+        Vector(const Vector &v) = default;
         explicit Vector(const Point &p);
 
         float norm() const;

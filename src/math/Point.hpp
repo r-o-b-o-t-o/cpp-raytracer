@@ -30,9 +30,9 @@ namespace Math {
         Point operator/(const float &mul) const;
         Point &operator/=(const float &mul);
 
-        float x() const;
-        float y() const;
-        float z() const;
+        virtual float x() const;
+        virtual float y() const;
+        virtual float z() const;
 
         void x(float val);
         void y(float val);

@@ -6,8 +6,6 @@ namespace Math {
 
     Vector::Vector(float x, float y, float z) : Point(x, y, z) { }
 
-    Vector::Vector(const Vector &v) = default;
-
     Vector::Vector(const Point &p) : Point(p) { }
 
     float Vector::norm() const {

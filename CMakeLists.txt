@@ -9,7 +9,11 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 set(source_files
         src/main.cpp
         src/math/Point.cpp
+        src/math/HPoint.cpp
         src/math/Vector.cpp
+        src/math/HVector.cpp
+        src/math/Ray.cpp
+        src/math/Matrix.cpp
 )
 
 if (NOT YamlCpp_LIBS)
