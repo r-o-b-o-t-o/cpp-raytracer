@@ -15,6 +15,13 @@ set(source_files
         src/math/Ray.cpp
         src/math/Matrix.cpp
         src/scene/Entity.cpp
+        src/scene/Object.cpp
+        src/scene/Sphere.cpp
+        src/scene/Plane.cpp
+        src/scene/Quad.cpp
+        src/scene/Cube.cpp
+        src/scene/Camera.cpp
+        src/scene/Light.cpp
 )
 
 if (NOT YamlCpp_LIBS)
