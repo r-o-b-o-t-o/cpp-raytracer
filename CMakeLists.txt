@@ -14,6 +14,7 @@ set(source_files
         src/math/HVector.cpp
         src/math/Ray.cpp
         src/math/Matrix.cpp
+        src/scene/Entity.cpp
 )
 
 if (NOT YamlCpp_LIBS)
@@ -26,6 +27,9 @@ if (WIN32 AND "${CMAKE_BUILD_TYPE}" STREQUAL "Release")
     set(EXECUTABLE_WIN32 "WIN32")
 endif ()
 
+include_directories("include/math")
+include_directories("include/scene")
+include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${YamlCpp_INCLUDE_DIRS})
 add_executable(Raytracing ${EXECUTABLE_WIN32} ${source_files})
