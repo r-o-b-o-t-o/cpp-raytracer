@@ -35,6 +35,7 @@ namespace Math {
         const float& at(int, int) const;
 
         friend void swap(Matrix& a, Matrix& b);
+        friend std::ostream &operator<<(std::ostream &s, const Matrix &m);
 
         int getCols() const;
         int getRows() const;
@@ -43,7 +44,6 @@ namespace Math {
         float get(int i, int j) const;
 
         Matrix inverse() const;
-        void print() const;
 
     protected:
         int rows;

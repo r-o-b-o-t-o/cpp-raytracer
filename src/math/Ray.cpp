@@ -2,21 +2,29 @@
 
 namespace Math {
     Ray::Ray(float ox, float oy, float oz, float vx, float vy, float vz)
-        : origin(ox, oy, oz),
-          vector(vx, vy, vz) {
+            : origin(ox, oy, oz),
+              vector(vx, vy, vz) {
     }
 
     Ray::Ray(Point o, Vector v)
-        : origin(o),
-          vector(v) {
+            : origin(o),
+              vector(v) {
     }
 
-    const Point &Math::Ray::getOrigin() const {
+    const Point &Ray::getOrigin() const {
         return this->origin;
     }
 
-    const Vector &Math::Ray::getVector() const {
+    void Ray::setOrigin(const Point &p) {
+        this->origin = p;
+    }
+
+    const Vector &Ray::getVector() const {
         return this->vector;
+    }
+
+    void Ray::setVector(const Vector &v) {
+        this->vector = v;
     }
 
     void Ray::normalize() {

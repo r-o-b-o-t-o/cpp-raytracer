@@ -7,6 +7,7 @@ namespace Scene {
     class Plane : public Object {
     public:
         bool intersect(const Math::Ray &ray, Math::Point &impact) const override;
+        Math::Ray getNormal(const Math::Point &impact, const Math::Point &observator) const override;
     };
 }
 

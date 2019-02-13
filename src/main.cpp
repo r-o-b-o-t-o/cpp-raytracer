@@ -6,7 +6,6 @@
 #include "scene/Entity.hpp"
 #include "scene/Camera.hpp"
 #include "scene/Light.hpp"
-#include "math/Point.hpp"
 
 void createAlphaMat(cv::Mat &mat) {
     for (int i = 0; i < mat.rows; ++i) {
@@ -39,16 +38,16 @@ void exportImage(int height, int width) {
     fprintf(stdout, "Saved PNG file with alpha data.\n");
 }
 
-Math::Point nodeToPoint(YAML::Node obj){
+Math::Point nodeToPoint(YAML::Node obj) {
     float x = obj["x"].as<float>();
     float y = obj["y"].as<float>();
     float z = obj["z"].as<float>();
     return Math::Point(x, y, z);
 }
 
-void loadScene(YAML::Node root, std::vector<Scene::Entity> objs){
-    Scene::Camera camera(nodeToPoint(root["camera"]));
-    Scene::Light light(nodeToPoint(root["light"]));
+void loadScene(YAML::Node root, std::vector<Scene::Entity*> objs) {
+    Scene::Camera* camera = new Scene::Camera(nodeToPoint(root["camera"]));
+    Scene::Light* light = new Scene::Light(nodeToPoint(root["light"]));
 
     objs.push_back(camera);
     objs.push_back(light);
@@ -59,19 +58,23 @@ void useScene(const std::string &scene) {
     std::string sceneName = config["name"].as<std::string>();
     std::cout << "Using scene: " << sceneName << std::endl;
 
-    std::vector<Scene::Entity> objs;
+    std::vector<Scene::Entity*> objs;
 
     loadScene(config, objs);
 
-
     YAML::Node resolution = config["resolution"];
     exportImage(resolution["height"].as<int>(), resolution["width"].as<int>());
+
+    for (auto &obj : objs) {
+        delete obj;
+    }
+    objs.clear();
 }
 
 int main(int argv, char** argc) {
     std::vector<std::string> scenes;
     std::string path = "../scenes/";
-    for (auto& entry : boost::filesystem::directory_iterator(path)) {
+    for (auto &entry : boost::filesystem::directory_iterator(path)) {
         scenes.push_back(entry.path().string());
     }
 
@@ -79,7 +82,7 @@ int main(int argv, char** argc) {
     int i = 1;
     for (auto &scene : scenes) {
         std::string name = YAML::LoadFile(scene)["name"].as<std::string>();
-        std::cout << i << ") " <<  name << std::endl;
+        std::cout << i << ") " << name << std::endl;
         ++i;
     }
 

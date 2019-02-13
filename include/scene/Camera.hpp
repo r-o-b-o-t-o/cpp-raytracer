@@ -6,13 +6,16 @@
 
 namespace Scene {
     class Camera : public Entity {
-        private:
-        float focal;
-        public:
+    public:
+        explicit Camera(Math::Point);
+
         Math::Ray getRay(float x, float y) const;
         void getFocal(float);
         float setFocal();
-        Camera(Math::Point);
+
+    private:
+        Math::Ray getNormal(const Math::Point &impact, const Math::Point &observator) const override;
+        float focal;
     };
 }
 

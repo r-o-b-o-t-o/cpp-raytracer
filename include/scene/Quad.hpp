@@ -4,7 +4,9 @@
 #include "Object.hpp"
 
 namespace Scene {
-    class Plane : public Object {
+    class Quad : public Object {
+    public:
+
     };
 }
 

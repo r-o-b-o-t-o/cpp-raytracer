@@ -188,6 +188,24 @@ namespace Math {
         std::swap(a.data, b.data);
     }
 
+    std::ostream &operator<<(std::ostream &s, const Matrix &m) {
+        std::ostringstream ostr;
+        ostr << "Matrix (" << m.getRows() << "x" << m.getCols() << ") ";
+        std::string offset = ostr.str();
+        s << offset;
+        for (int i = 0; i < m.getRows(); ++i) {
+            if (i > 0) {
+                std::cout << std::string(offset.length(), ' ');
+            }
+            std::cout << "[ ";
+            for (int j = 0; j < m.getCols(); ++j) {
+                std::cout << std::setprecision(3) << std::setw(6) << m.at(i, j) << " ";
+            }
+            std::cout << "]" << std::endl;
+        }
+        return s;
+    }
+
     int Matrix::getCols() const {
         return this->cols;
     }
@@ -278,16 +296,6 @@ namespace Math {
     void Matrix::addRows(int resultRow, float factor, int rowToAdd) { // resultRow = resultRow + factor * rowToAdd
         for (int i = 0; i < this->cols; ++i) {
             this->at(resultRow, i) += factor * this->at(rowToAdd, i);
-        }
-    }
-
-    void Matrix::print() const {
-        for (int i = 0; i < this->rows; ++i) {
-            std::cout << "[ ";
-            for (int j = 0; j < this->cols; ++j) {
-                std::cout << std::setprecision(3) << std::setw(6) << this->at(i, j) << " ";
-            }
-            std::cout << "]" << std::endl;
         }
     }
 }

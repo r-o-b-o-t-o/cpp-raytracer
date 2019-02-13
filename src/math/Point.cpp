@@ -1,4 +1,5 @@
 #include "math/Point.hpp"
+#include "math/Vector.hpp"
 
 namespace Math {
     Point::Point() {
@@ -14,9 +15,29 @@ namespace Math {
     }
 
     Point::Point(const Point &p) {
+        *this = p;
+    }
+
+    Point::Point(const Vector &v) {
+        *this = v;
+    }
+
+    Point::operator Vector() const {
+        return Vector(*this);
+    }
+
+    Point &Point::operator=(const Point &p) {
         for (int i = 0; i < 3; ++i) {
             (*this)[i] = p[i];
         }
+        return *this;
+    }
+
+    Point &Point::operator=(const Vector &v) {
+        for (int i = 0; i < 3; ++i) {
+            (*this)[i] = v[i];
+        }
+        return *this;
     }
 
     float Point::dot(const Point &other) {
@@ -53,6 +74,15 @@ namespace Math {
         return *this;
     }
 
+    Point Point::operator+(const Vector &other) const {
+        return *this + Point(other);
+    }
+
+    Point &Point::operator+=(const Vector &rhs) {
+        this->operator+=(Point(rhs));
+        return *this;
+    }
+
     Point Point::operator-(const Point &other) const {
         Point p(*this);
         p -= other;
@@ -63,6 +93,15 @@ namespace Math {
         for (int i = 0; i < 3; ++i) {
             (*this)[i] -= rhs[i];
         }
+        return *this;
+    }
+
+    Point Point::operator-(const Vector &other) const {
+        return *this - Point(other);
+    }
+
+    Point &Point::operator-=(const Vector &rhs) {
+        this->operator-=(Point(rhs));
         return *this;
     }
 

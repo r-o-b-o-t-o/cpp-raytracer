@@ -14,7 +14,9 @@ namespace Math {
         Ray normalized() const;
 
         const Point &getOrigin() const;
+        void setOrigin(const Point &p);
         const Vector &getVector() const;
+        void setVector(const Vector &v);
 
     protected:
         Point origin;

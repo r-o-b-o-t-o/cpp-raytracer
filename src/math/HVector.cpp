@@ -44,15 +44,15 @@ namespace Math {
     }
 
     float HVector::x() const {
-        return Point::x() / this->_w;
+        return Vector::x() / this->_w;
     }
 
     float HVector::y() const {
-        return Point::y() / this->_w;
+        return Vector::y() / this->_w;
     }
 
     float HVector::z() const {
-        return Point::z() / this->_w;
+        return Vector::z() / this->_w;
     }
 
     float HVector::w() const {

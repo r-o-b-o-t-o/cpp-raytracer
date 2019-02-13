@@ -13,4 +13,9 @@ namespace Scene {
         impact = ray.getOrigin() + t * ray.getVector();
         return true;
     }
+
+    Math::Ray Plane::getNormal(const Math::Point &impact, const Math::Point &observator) const {
+        Math::Ray nal(this->globalToLocal(impact), Math::Vector(0, 0, this->globalToLocal(observator).z()));
+        return this->localToGlobal(nal.normalized());
+    }
 }

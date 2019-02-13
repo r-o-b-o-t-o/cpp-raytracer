@@ -12,6 +12,9 @@ namespace Math {
         Point(float x, float y, float z);
         Point(const Point &p);
         explicit Point(const Vector &v);
+        explicit operator Vector() const;
+        Point &operator=(const Point &p);
+        Point &operator=(const Vector &v);
 
         float dot(const Point &other);
 
@@ -22,8 +25,12 @@ namespace Math {
 
         Point operator+(const Point &other) const;
         Point &operator+=(const Point &rhs);
+        Point operator+(const Vector &other) const;
+        Point &operator+=(const Vector &rhs);
         Point operator-(const Point &other) const;
         Point &operator-=(const Point &rhs);
+        Point operator-(const Vector &other) const;
+        Point &operator-=(const Vector &rhs);
         Point operator-() const;
         Point operator*(const float &mul) const;
         Point &operator*=(const float &mul);

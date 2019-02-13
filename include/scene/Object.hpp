@@ -5,7 +5,7 @@
 
 namespace Scene {
     class Object : public Entity {
-
+    public:
         virtual bool intersect(const Math::Ray &ray, Math::Point &impact) const = 0;
     };
 }

@@ -5,8 +5,11 @@
 
 namespace Scene {
     class Light : public Entity {
-        public:
-        Light(Math::Point);
+    public:
+        explicit Light(const Math::Point &point);
+
+    private:
+        Math::Ray getNormal(const Math::Point &impact, const Math::Point &observator) const override;
     };
 }
 
