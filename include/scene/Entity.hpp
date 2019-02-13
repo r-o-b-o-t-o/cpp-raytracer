@@ -26,21 +26,21 @@ namespace Scene {
             void scale(float factor); // effectue un redimensionnement de facteur factor
 
             template<typename T>
-            T localToGlobal(T& in){
+            T localToGlobal(const T& in)const{
                 return transInv * in;
             }
-            template <Math::Ray&>
-            Math::Ray localToGlobal(const Math::Ray& r){
+            
+            Math::Ray localToGlobal(const Math::Ray& r) const{
                 Math::Ray t = Math::Ray(this->localToGlobal(r.getOrigin()), this->localToGlobal(r.getVector()));
                 return t;
             }
 
             template<typename T>
-            T globalToLocal(T& in){
+            T globalToLocal(const T& in){
                 return trans * in;
             }
-            template <Math::Ray&>
-            Math::Ray globalToLocal(const Math::Ray& r){
+
+            Math::Ray globalToLocal(const Math::Ray& r) const{
                 Math::Ray t = Math::Ray(this->globalToLocal(r.getOrigin()), this->globalToLocal(r.getVector()));
                 return t;
             }
