@@ -21,6 +21,8 @@ namespace Math {
         Matrix& operator*=(const HPoint &rhs);
         Matrix operator*(const HVector &rhs) const;
         Matrix& operator*=(const HVector &rhs);
+        Point operator*(const Point &rhs) const;
+        Vector operator*(const Vector &rhs) const;
         Matrix operator-() const;
         float& operator[](int);
         const float& operator[](int) const;
