@@ -4,8 +4,8 @@
 #include "Object.hpp"
 
 namespace Scene {
-
-    class Plane: Object {};
+    class Plane : public Object {
+    };
 }
 
 #endif // QUAD_HPP

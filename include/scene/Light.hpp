@@ -4,7 +4,8 @@
 #include "Entity.hpp"
 
 namespace Scene {
-    class Light: Entity {};
+    class Light : public Entity {
+    };
 }
 
 #endif // LIGHT_HPP

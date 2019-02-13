@@ -4,7 +4,8 @@
 #include "Object.hpp"
 
 namespace Scene {
-    class Cube: Object {};
+    class Cube : public Object {
+    };
 }
 
 #endif // CUBE_HPP

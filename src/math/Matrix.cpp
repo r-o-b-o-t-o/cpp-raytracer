@@ -120,6 +120,18 @@ namespace Math {
         return *this;
     }
 
+    Point Matrix::operator*(const Point &rhs) const {
+        HPoint hp(rhs);
+        Matrix m = (*this) * hp;
+        return Point(m.at(0, 0), m.at(0, 1), m.at(0, 2));
+    }
+
+    Vector Matrix::operator*(const Vector &rhs) const {
+        HVector hv(rhs);
+        Matrix m = (*this) * hv;
+        return Vector(m.at(0, 0), m.at(0, 1), m.at(0, 2));
+    }
+
     Matrix Matrix::operator-() const {
         Matrix m(*this);
         m *= -1.0f;

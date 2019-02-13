@@ -29,6 +29,7 @@ namespace Math {
         Point &operator*=(const float &mul);
         Point operator/(const float &mul) const;
         Point &operator/=(const float &mul);
+        friend Point operator*(const float &mul, const Point &p);
 
         virtual float x() const;
         virtual float y() const;

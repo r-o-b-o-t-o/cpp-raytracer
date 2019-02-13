@@ -95,6 +95,10 @@ namespace Math {
         return *this;
     }
 
+    Point operator*(const float &mul, const Point &p) {
+        return Point(p * mul);
+    }
+
     float Point::x() const {
         return (*this)[0];
     }

@@ -4,14 +4,15 @@
 namespace Scene {
 
 	Entity::Entity(): pos(Math::Point()),
-	trans(Math::Matrix(4, 4, 0)),
-	transInv(Math::Matrix(4, 4, 0)) {
+	trans(Math::Matrix()),
+	transInv(Math::Matrix()) {
 	}
 
 	Entity::Entity(Math::Point point):
-	trans(Math::Matrix(4, 4, 0)),
-	transInv(Math::Matrix(4, 4, 0)) {
+	trans(Math::Matrix()),
+	transInv(Math::Matrix()) {
 		this->pos = point;
+		this->translate(point[0], point[1], point[2]);
 	}
 
 	void Entity::setPos(Math::Point point){
@@ -32,7 +33,7 @@ namespace Scene {
 		mat(0, 3) = x;
 		mat(1, 3) = y;
 		mat(2, 3) = z;
-		//this->trans = mat * this->trans;
+		this->trans = mat * this->trans;
 
 		this->transInv = this->trans.inverse();
 	}
@@ -46,7 +47,7 @@ namespace Scene {
 		mat(1, 1) = cos(deg);
 		mat(1, 2) = -sin(deg);
 		
-		//this->trans = mat * this->trans;
+		this->trans = mat * this->trans;
 		
 		this->transInv = this->trans.inverse();
 	}
@@ -60,7 +61,7 @@ namespace Scene {
 		mat(0, 0) = cos(deg);
 		mat(2, 0) = -sin(deg);
 		
-		//this->trans = mat * this->trans;
+		this->trans = mat * this->trans;
 		
 		this->transInv = this->trans.inverse();
 	}
@@ -74,7 +75,7 @@ namespace Scene {
 		mat(1, 1) = cos(deg);
 		mat(0, 1) = -sin(deg);
 		
-		//this->trans = mat * this->trans;
+		this->trans = mat * this->trans;
 		
 		this->transInv = this->trans.inverse();
 	}
@@ -87,7 +88,7 @@ namespace Scene {
 		mat(1, 1) = factor;
 		mat(2, 2) = factor;
 		
-		//this->trans = mat * this->trans;
+		this->trans = mat * this->trans;
 		
 		this->transInv = this->trans.inverse();
 	}

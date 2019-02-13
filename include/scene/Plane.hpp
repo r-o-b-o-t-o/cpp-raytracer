@@ -4,7 +4,10 @@
 #include "Object.hpp"
 
 namespace Scene {
-    class Plane: Object {};
+    class Plane : public Object {
+    public:
+        bool intersect(const Math::Ray &ray, Math::Point &impact) const override;
+    };
 }
 
 #endif // PLANE_HPP
