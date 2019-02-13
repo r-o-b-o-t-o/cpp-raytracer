@@ -5,6 +5,8 @@
 
 namespace Scene {
     class Light : public Entity {
+        public:
+        Light(Math::Point);
     };
 }
 

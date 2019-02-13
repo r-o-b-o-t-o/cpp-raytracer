@@ -18,4 +18,14 @@ namespace Math {
     const Vector &Math::Ray::getVector() const {
         return this->vector;
     }
+
+    void Ray::normalize() {
+        this->vector.normalize();
+    }
+
+    Ray Ray::normalized() const {
+        Ray r(*this);
+        r.normalize();
+        return r;
+    }
 }

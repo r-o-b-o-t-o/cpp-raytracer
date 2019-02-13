@@ -3,6 +3,10 @@
 #include <opencv2/opencv.hpp>
 #include <boost/filesystem.hpp>
 #include <yaml-cpp/yaml.h>
+#include "scene/Entity.hpp"
+#include "scene/Camera.hpp"
+#include "scene/Light.hpp"
+#include "math/Point.hpp"
 
 void createAlphaMat(cv::Mat &mat) {
     for (int i = 0; i < mat.rows; ++i) {
@@ -35,10 +39,31 @@ void exportImage(int height, int width) {
     fprintf(stdout, "Saved PNG file with alpha data.\n");
 }
 
+Math::Point nodeToPoint(YAML::Node obj){
+    float x = obj["x"].as<float>();
+    float y = obj["y"].as<float>();
+    float z = obj["z"].as<float>();
+    return Math::Point(x, y, z);
+}
+
+void loadScene(YAML::Node root, std::vector<Scene::Entity> objs){
+    Scene::Camera camera(nodeToPoint(root["camera"]));
+    Scene::Light light(nodeToPoint(root["light"]));
+
+    objs.push_back(camera);
+    objs.push_back(light);
+}
+
 void useScene(const std::string &scene) {
     YAML::Node config = YAML::LoadFile(scene);
     std::string sceneName = config["name"].as<std::string>();
     std::cout << "Using scene: " << sceneName << std::endl;
+
+    std::vector<Scene::Entity> objs;
+
+    loadScene(config, objs);
+
+
     YAML::Node resolution = config["resolution"];
     exportImage(resolution["height"].as<int>(), resolution["width"].as<int>());
 }

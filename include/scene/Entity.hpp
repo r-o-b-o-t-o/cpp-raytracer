@@ -15,8 +15,6 @@ namespace Scene {
         Entity();
         Entity(Math::Point);
 
-        virtual bool intersect(const Math::Ray &ray, Math::Point &impact) const = 0;
-
     protected:
         Math::Point pos;
         Math::Matrix trans;
@@ -33,7 +31,6 @@ namespace Scene {
             return transInv * in;
         }
 
-        template<Math::Ray &>
         Math::Ray localToGlobal(const Math::Ray &r) const {
             Math::Ray t = Math::Ray(this->localToGlobal(r.getOrigin()), this->localToGlobal(r.getVector()));
             return t;
