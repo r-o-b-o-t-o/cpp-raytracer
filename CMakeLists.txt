@@ -22,6 +22,7 @@ set(source_files
         src/scene/Cube.cpp
         src/scene/Camera.cpp
         src/scene/Light.cpp
+        src/scene/Color.cpp
         src/scene/SceneObj.cpp
 )
 

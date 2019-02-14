@@ -12,7 +12,8 @@ namespace Scene {
         Math::Ray getRay(float x, float y) const;
         void setFocal(float);
         float getFocal() const;
-    private:
+
+    protected:
         float focal;
     };
 }
