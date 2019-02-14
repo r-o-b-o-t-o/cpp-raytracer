@@ -6,6 +6,8 @@
 #include "scene/Entity.hpp"
 #include "scene/Camera.hpp"
 #include "scene/Light.hpp"
+#include "scene/Object.hpp"
+#include "scene/Plane.hpp"
 
 void createAlphaMat(cv::Mat &mat) {
     for (int i = 0; i < mat.rows; ++i) {
@@ -45,12 +47,37 @@ Math::Point nodeToPoint(YAML::Node obj) {
     return Math::Point(x, y, z);
 }
 
-void loadScene(YAML::Node root, std::vector<Scene::Entity*> objs) {
+Scene::Object* nodeToObj(YAML::Node obj){
+    std::string type = obj["type"].as<std::string>();
+    if (type == "plane"){
+        return new Scene::Plane(nodeToPoint(obj));
+    }
+    if (type == "quad"){
+        return new Scene::Plane(nodeToPoint(obj));
+    }
+    if (type == "cube"){
+        return new Scene::Plane(nodeToPoint(obj));
+    }
+    if (type == "sphere"){
+        return new Scene::Plane(nodeToPoint(obj));
+    }
+    else {
+        return nullptr;
+    }
+}
+
+void loadScene(YAML::Node root, std::multimap<std::string, Scene::Entity*> objs) {
     Scene::Camera* camera = new Scene::Camera(nodeToPoint(root["camera"]));
     Scene::Light* light = new Scene::Light(nodeToPoint(root["light"]));
 
-    objs.push_back(camera);
-    objs.push_back(light);
+    objs.insert(std::make_pair("camera", camera));
+    objs.insert(std::make_pair("light", light));
+
+    YAML::Node objects = root["objects"];
+    for(YAML::const_iterator it=objects.begin();it!=objects.end();++it) {
+        std::string objName = it->first.as<std::string>();
+        objs.insert(std::make_pair("objects", nodeToObj(objects[objName])));
+    }
 }
 
 void useScene(const std::string &scene) {
@@ -58,15 +85,15 @@ void useScene(const std::string &scene) {
     std::string sceneName = config["name"].as<std::string>();
     std::cout << "Using scene: " << sceneName << std::endl;
 
-    std::vector<Scene::Entity*> objs;
+    std::multimap<std::string, Scene::Entity*> objs;
 
     loadScene(config, objs);
 
     YAML::Node resolution = config["resolution"];
     exportImage(resolution["height"].as<int>(), resolution["width"].as<int>());
 
-    for (auto &obj : objs) {
-        delete obj;
+    for (auto it = objs.begin(); it != objs.end(); ++it) {
+        delete it->second;
     }
     objs.clear();
 }

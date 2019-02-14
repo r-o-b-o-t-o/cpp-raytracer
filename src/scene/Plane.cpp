@@ -3,6 +3,11 @@
 #include <cmath>
 
 namespace Scene {
+
+    Plane::Plane(Math::Point point): Object(point){
+
+    }
+    
     bool Plane::intersect(const Math::Ray &ray, Math::Point &impact) const {
         auto r = this->globalToLocal(ray);
         auto t = -r.getOrigin().z() / r.getVector().z();

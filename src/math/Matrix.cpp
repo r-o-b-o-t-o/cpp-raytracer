@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 
 namespace Math {
     Matrix::Matrix(int size) : Matrix(size, size, 0.0f) {

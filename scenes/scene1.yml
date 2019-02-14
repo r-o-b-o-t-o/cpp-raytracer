@@ -3,15 +3,21 @@ resolution:
   width: 1280
   height: 720
 light:
-  x: 0
-  y: 0
-  z: 0
+  x: 0.0
+  y: 0.0
+  z: 0.0
 camera:
-  x: 0
-  y: 0
-  z: 0
+  x: 0.0
+  y: 0.0
+  z: 0.0
 objects:
-  plane:
-    x: 10
-    y: 0
-    z: 0
+  obj1:
+    type: "plane"
+    x: 10.0
+    y: 0.0
+    z: 0.0
+  obj2:
+    type: "plane"
+    x: 20.0
+    y: 0.0
+    z: 10.0
