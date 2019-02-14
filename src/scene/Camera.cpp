@@ -23,8 +23,7 @@ namespace Scene {
         // normaliser R'
         // return R'
 
-        //return r2.normalized();
-        return r2;
+        return r2.normalized();
     }
 
 
@@ -34,9 +33,5 @@ namespace Scene {
 
     float Camera::setFocal() {
         return this->focal;
-    }
-
-    Math::Ray Camera::getNormal(const Math::Point &impact, const Math::Point &observator) const {
-        return Math::Ray();
     }
 }

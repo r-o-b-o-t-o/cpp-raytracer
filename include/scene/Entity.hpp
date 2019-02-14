@@ -16,8 +16,6 @@ namespace Scene {
         explicit Entity(Math::Point);
         virtual ~Entity() = 0;
 
-        virtual Math::Ray getNormal(const Math::Point &impact, const Math::Point &observator) const = 0;
-
     protected:
         Math::Point pos;
         Math::Matrix trans;
