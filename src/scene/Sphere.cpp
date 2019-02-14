@@ -10,7 +10,6 @@ namespace Scene {
     }
 
     bool Sphere::intersect(const Math::Ray &ray, Math::Point &impact) const {
-        std::cout << "Sphere::intesect" << std::endl;
         Math::Ray r = this->globalToLocal(ray);
         float a = pow(r.getVector()[0], 2)+pow(r.getVector()[1], 2)+pow(r.getVector()[2], 2);
         float b = 2*(r.getOrigin()[0]*r.getVector()[0] + r.getOrigin()[1]*r.getVector()[1] + r.getOrigin()[2]*r.getVector()[2]);

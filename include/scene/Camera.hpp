@@ -11,8 +11,9 @@ namespace Scene {
 
         Math::Ray getRay(float x, float y) const;
         void setFocal(float);
-        float getFocal() const override;
-
+        float getFocal() const;
+    private:
+        float focal;
     };
 }
 

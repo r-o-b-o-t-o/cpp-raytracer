@@ -12,7 +12,7 @@ camera:
   z: 0.0
 objects:
   obj1:
-    type: "square"
-    x: 0.0
+    type: "sphere"
+    x: 1.0
     y: 0.0
-    z: 0.0
+    z: -1.0

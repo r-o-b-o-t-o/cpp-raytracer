@@ -29,7 +29,7 @@ namespace Scene {
 
         template<typename T>
         T localToGlobal(const T &in) const {
-            return transInv * in;
+            return trans * in;
         }
 
         Math::Ray localToGlobal(const Math::Ray &r) const {
@@ -39,7 +39,7 @@ namespace Scene {
 
         template<typename T>
         T globalToLocal(const T &in) const {
-            return trans * in;
+            return transInv * in;
         }
 
         Math::Ray globalToLocal(const Math::Ray &r) const {
