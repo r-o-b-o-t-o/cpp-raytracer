@@ -2,7 +2,7 @@
 
 namespace Scene {
 
-    Object::Object(Math::Point point): Entity(point){
+    Object::Object(const Math::Point &point): Entity(point){
         
     }
 }

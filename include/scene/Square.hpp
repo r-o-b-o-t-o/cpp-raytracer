@@ -6,6 +6,7 @@
 namespace Scene {
     class Square : public Plane {
     public:
+        Square(const Math::Point &point);
         bool intersect(const Math::Ray &ray, Math::Point &impact) const override;
     };
 }

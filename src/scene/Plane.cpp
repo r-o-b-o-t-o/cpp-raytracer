@@ -4,7 +4,7 @@
 
 namespace Scene {
 
-    Plane::Plane(Math::Point point): Object(point){
+    Plane::Plane(const Math::Point &point): Object(point){
 
     }
     

@@ -19,10 +19,10 @@ set(source_files
         src/scene/Sphere.cpp
         src/scene/Plane.cpp
         src/scene/Square.cpp
-        src/scene/Quad.cpp
         src/scene/Cube.cpp
         src/scene/Camera.cpp
         src/scene/Light.cpp
+        src/scene/SceneObj.cpp
 )
 
 if (NOT YamlCpp_LIBS)

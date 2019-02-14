@@ -12,12 +12,7 @@ camera:
   z: 0.0
 objects:
   obj1:
-    type: "plane"
-    x: 10.0
+    type: "square"
+    x: 0.0
     y: 0.0
     z: 0.0
-  obj2:
-    type: "plane"
-    x: 20.0
-    y: 0.0
-    z: 10.0

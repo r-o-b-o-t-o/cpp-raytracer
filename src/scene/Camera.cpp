@@ -1,4 +1,5 @@
 #include "scene/Camera.hpp"
+#include <iostream>
 
 namespace Scene {
     Camera::Camera(Math::Point point) : Entity(point) {
@@ -12,10 +13,9 @@ namespace Scene {
     Math::Ray Camera::getRay(float x, float y) const {
         // calculer le point de l ecran P en Ref Local
         Math::Point p(2 * x - 1, 2 * y - 1, 0);
-        Math::Point f(0, 0, this->focal);
+        Math::Point f(0.0f, 0.0f, getFocal());
         // calculer le vecteur passant par le point focal et P
         Math::Vector v(p - f);
-
         // creer le rayon R d origine P et de direction V
         Math::Ray r(p, v);
         // passer R dans le ref global => R'
@@ -27,11 +27,11 @@ namespace Scene {
     }
 
 
-    void Camera::getFocal(float focal) {
+    void Camera::setFocal(float focal) {
         this->focal = focal;
     }
 
-    float Camera::setFocal() {
+    float Camera::getFocal() const {
         return this->focal;
     }
 }

@@ -10,11 +10,9 @@ namespace Scene {
         explicit Camera(Math::Point);
 
         Math::Ray getRay(float x, float y) const;
-        void getFocal(float);
-        float setFocal();
+        void setFocal(float);
+        float getFocal() const override;
 
-    private:
-        float focal;
     };
 }
 

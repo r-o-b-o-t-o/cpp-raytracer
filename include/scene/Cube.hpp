@@ -1,11 +1,12 @@
 #ifndef CUBE_HPP
 #define CUBE_HPP
 
-#include "Object.hpp"
+#include "Square.hpp"
 
 namespace Scene {
-    class Cube : public Object {
+    class Cube : public Square {
     public:
+        Cube(const Math::Point &point);
 
     };
 }
