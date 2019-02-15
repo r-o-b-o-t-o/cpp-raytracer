@@ -1,8 +1,5 @@
 #include "scene/Camera.hpp"
-#include "scene/Color.hpp"
-#include "scene/Material.hpp"
-#include "scene/Object.hpp"
-#include <iostream>
+#include "scene/Scene.hpp"
 
 namespace scene {
     Camera::Camera(maths::Point point) : Entity(point) {
@@ -31,26 +28,25 @@ namespace scene {
 
     //Retourne la couleur au point d'impact entre l'objet et le rayon, en fonction des éléments de la scène.
     //Le modèle d'illumination est ici celui de Phong.
-    scene::Color Camera::getImpactColor(const maths::Ray& ray, const scene::Object& obj, const maths::Point& impact, const scene::Scene& scene)const{
-        maths::Ray raynal = obj.getNormal(impact, ray.getOrigin());
+    scene::Color Camera::getImpactColor(const maths::Ray &ray, const scene::Object &obj, const maths::Point &impact, const scene::Scene &scene) const {
+        maths::Ray nal = obj.getNormal(impact, ray.getOrigin());
         scene::Material t = obj.getMaterial(impact);
         scene::Color col = t.getKa();
-        int lights = scene.getAllLights().size();
-        
-        
-        for (int i = 0; i < lights; i++)
-        {
-            const Light* lum = scene.getLight(i);
-            float coef = lum->getVectorToLight(impact).dot(raynal.getVector());
-            auto spec = (2*coef*raynal.getVector()) - lum->getVectorToLight(impact);
-            
-            if (coef > 0)
-                col += coef * (t.getKd().mul(lum->getDiffuseColor()) + (lum->getSpecularColor().mul(t.getKs().mul(pow(spec.dot(-ray.getVector), t.getShininess()))));
+        auto lights = scene.getAllLights().size();
+
+        for (int i = 0; i < lights; i++) {
+            auto &lum = scene.getLight(i);
+            float coef = lum.getVectorToLight(impact).dot(nal.getVector());
+            auto spec = (2 * coef * nal.getVector()) - lum.getVectorToLight(impact);
+
+            if (coef > 0) {
+                col += coef * t.getKd().mul(lum.getDiffuseColor());
+                col += lum.getSpecularColor().mul(t.getKs() * powf(spec.dot(-ray.getVector()), t.getShininess()));
+            }
         }
-        
+
         return col;
     }
-
 
     void Camera::setFocal(float focal) {
         this->focal = focal;

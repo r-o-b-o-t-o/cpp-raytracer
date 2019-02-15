@@ -21,7 +21,7 @@ namespace scene {
         return maths::Vector(p - this->pos);
     }
 
-    const Color &Light::getDiffuseColor() const {
+    Color Light::getDiffuseColor() const {
         return this->diffuse;
     }
 
@@ -29,7 +29,7 @@ namespace scene {
         this->diffuse = diffuse;
     }
 
-    const Color &Light::getSpecularColor() const {
+    Color Light::getSpecularColor() const {
         return this->specular;
     }
 

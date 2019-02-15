@@ -27,11 +27,11 @@ namespace scene {
         this->objs.clear();
     }
 
-    scene::Light Scene::getLight(int i) {
+    const scene::Light &Scene::getLight(int i) const {
         return this->lights[i];
     }
 
-    std::vector<scene::Light> Scene::getAllLights() {
+    const std::vector<scene::Light> &Scene::getAllLights() const {
         return this->lights;
     }
 
@@ -43,7 +43,7 @@ namespace scene {
         return this->objs[i];
     }
 
-    std::vector<Object*> &Scene::getAllObj() {
+    const std::vector<Object*> &Scene::getAllObj() {
         return this->objs;
     }
 
@@ -57,6 +57,11 @@ namespace scene {
         for (int i = 0; i < mat.rows; ++i) {
             for (int j = 0; j < mat.cols; ++j) {
                 auto &bgra = mat.at<cv::Vec4b>(i, j);
+                bgra[0] = cv::saturate_cast<uchar>(0.0f);
+                bgra[1] = cv::saturate_cast<uchar>(0.0f);
+                bgra[2] = cv::saturate_cast<uchar>(0.0f);
+                bgra[3] = cv::saturate_cast<uchar>(255.0f);
+
                 // x val [0, 1]
                 float x = (float)i / (float)mat.rows;
                 // y val [0, 1]
@@ -71,11 +76,7 @@ namespace scene {
                         bgra[1] = cv::saturate_cast<uchar>(128.0f);
                         bgra[2] = cv::saturate_cast<uchar>(0.0f);
                         bgra[3] = cv::saturate_cast<uchar>(255.0f);
-                    } else {
-                        bgra[0] = cv::saturate_cast<uchar>(0.0f);
-                        bgra[1] = cv::saturate_cast<uchar>(0.0f);
-                        bgra[2] = cv::saturate_cast<uchar>(0.0f);
-                        bgra[3] = cv::saturate_cast<uchar>(255.0f);
+                        break;
                     }
                 }
             }

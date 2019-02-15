@@ -35,4 +35,42 @@ namespace scene {
     Color Color::mul(const Color &c) {
         return Color(this->r() * c.r(), this->g() * c.g(), this->b() * c.b());
     }
+
+    Color Color::operator*(float f) const {
+        Color c(*this);
+        c *= f;
+        return c;
+    }
+
+    Color &Color::operator*=(float f) {
+        this->_r *= f;
+        this->_g *= f;
+        this->_b *= f;
+        this->clamp();
+        return *this;
+    }
+
+    void Color::clamp() {
+        this->_r = std::max(0.0f, std::min(1.0f, this->_r));
+        this->_g = std::max(0.0f, std::min(1.0f, this->_g));
+        this->_b = std::max(0.0f, std::min(1.0f, this->_b));
+    }
+
+    Color operator*(float f, const Color &c) {
+        return c * f;
+    }
+
+    Color Color::operator+(const Color &c) const {
+        Color res(*this);
+        res += c;
+        return res;
+    }
+
+    Color &Color::operator+=(const Color &c) {
+        this->_r += c._r;
+        this->_g += c._g;
+        this->_b += c._b;
+        this->clamp();
+        return *this;
+    }
 }

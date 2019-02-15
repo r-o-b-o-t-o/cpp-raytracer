@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 #include "scene/Entity.hpp"
 
 namespace scene {
@@ -44,10 +44,10 @@ namespace scene {
 	void Entity::rotateX(float deg){
 		maths::Matrix mat = maths::Matrix();
 			
-		mat(2, 1) = sin(deg);
-		mat(2, 2) = cos(deg);
-		mat(1, 1) = cos(deg);
-		mat(1, 2) = -sin(deg);
+		mat(2, 1) = sinf(deg);
+		mat(2, 2) = cosf(deg);
+		mat(1, 1) = cosf(deg);
+		mat(1, 2) = -sinf(deg);
 		
 		this->trans = mat * this->trans;
 		
@@ -58,10 +58,10 @@ namespace scene {
 	void Entity::rotateY(float deg){
 		maths::Matrix mat = maths::Matrix();
 			
-		mat(0, 2) = sin(deg);
-		mat(2, 2) = cos(deg);
-		mat(0, 0) = cos(deg);
-		mat(2, 0) = -sin(deg);
+		mat(0, 2) = sinf(deg);
+		mat(2, 2) = cosf(deg);
+		mat(0, 0) = cosf(deg);
+		mat(2, 0) = -sinf(deg);
 		
 		this->trans = mat * this->trans;
 		
@@ -72,10 +72,10 @@ namespace scene {
 	void Entity::rotateZ(float deg){
 		maths::Matrix mat = maths::Matrix();
 			
-		mat(1, 0) = sin(deg);
-		mat(0, 0) = cos(deg);
-		mat(1, 1) = cos(deg);
-		mat(0, 1) = -sin(deg);
+		mat(1, 0) = sinf(deg);
+		mat(0, 0) = cosf(deg);
+		mat(1, 1) = cosf(deg);
+		mat(0, 1) = -sinf(deg);
 		
 		this->trans = mat * this->trans;
 		

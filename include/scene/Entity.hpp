@@ -16,16 +16,16 @@ namespace scene {
         explicit Entity(maths::Point);
         virtual ~Entity() = 0;
 
-    protected:
-        maths::Point pos;
-        maths::Matrix trans;
-        maths::Matrix transInv;
-
         void translate(float x, float y, float z); // effectue une translation de vecteur (x,y,z)
         void rotateX(float deg); // effectue une rotation sur l'axe X, de deg radians
         void rotateY(float deg); // effectue une rotation sur l'axe Y, de deg radians
         void rotateZ(float deg); // effectue une rotation sur l'axe Z, de deg radians
         void scale(float factor); // effectue un redimensionnement de facteur factor
+
+    protected:
+        maths::Point pos;
+        maths::Matrix trans;
+        maths::Matrix transInv;
 
         template<typename T>
         T localToGlobal(const T &in) const {

@@ -35,9 +35,7 @@ namespace maths {
     }
 
     void Matrix::freeArray() {
-        if (this->data != nullptr) {
-            delete[] this->data;
-        }
+        delete[] this->data;
     }
 
     Matrix &Matrix::operator=(Matrix other) {

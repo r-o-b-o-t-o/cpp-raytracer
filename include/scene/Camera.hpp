@@ -5,9 +5,10 @@
 #include "maths/Ray.hpp"
 #include "scene/Color.hpp"
 #include "scene/Object.hpp"
-#include "scene/Scene.hpp"
 
 namespace scene {
+    class Scene; // Forward declaration
+
     class Camera : public Entity {
     public:
         explicit Camera(maths::Point);
@@ -15,7 +16,7 @@ namespace scene {
         maths::Ray getRay(float x, float y) const;
         void setFocal(float);
         float getFocal() const;
-        scene::Color getImpactColor(const maths::Ray& ray, const scene::Object& obj, const maths::Point& impact, const scene::Scene& sc)const;
+        scene::Color getImpactColor(const maths::Ray &ray, const scene::Object &obj, const maths::Point &impact, const Scene &sc) const;
 
     protected:
         float focal;

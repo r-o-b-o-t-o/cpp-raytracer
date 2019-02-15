@@ -16,12 +16,12 @@ namespace scene {
         explicit Scene(YAML::Node root);
         ~Scene();
 
-        scene::Light getLight(int);
-        std::vector<scene::Light> getAllLights();
+        const scene::Light &getLight(int) const;
+        const std::vector<scene::Light> &getAllLights() const;
         void insertLight(Light);
 
         scene::Object* getObj(int);
-        std::vector<scene::Object*> &getAllObj();
+        const std::vector<scene::Object*> &getAllObj();
         void insertObj(scene::Object*);
 
         const Camera &getCamera() const;

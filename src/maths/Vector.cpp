@@ -1,6 +1,6 @@
 #include "maths/Vector.hpp"
 
-#include <math.h>
+#include <cmath>
 
 namespace maths {
     Vector::Vector() {
@@ -71,7 +71,7 @@ namespace maths {
         for (float value : this->values) {
             sum += powf(value, 2.0f);
         }
-        return sqrt(sum);
+        return sqrtf(sum);
     }
 
     void Vector::normalize() {

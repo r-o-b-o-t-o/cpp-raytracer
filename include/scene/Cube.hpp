@@ -4,10 +4,12 @@
 #include "Square.hpp"
 
 namespace scene {
-    class Cube : public Square {
+    class Cube : public Object {
     public:
-        Cube(const maths::Point &point);
+        explicit Cube(const maths::Point &point);
 
+        bool intersect(const maths::Ray &ray, maths::Point &impact) const override;
+        maths::Ray getNormal(const maths::Point &impact, const maths::Point &observator) const override;
     };
 }
 

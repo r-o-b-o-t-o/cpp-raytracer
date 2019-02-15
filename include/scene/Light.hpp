@@ -14,9 +14,9 @@ namespace scene {
         maths::Vector getVectorToLight(const maths::Point &p) const;
         maths::Vector getVectorFromLight(const maths::Point &p) const;
 
-        const Color &getDiffuseColor() const;
+        Color getDiffuseColor() const;
         void setDiffuseColor(const Color &diffuse);
-        const Color &getSpecularColor() const;
+        Color getSpecularColor() const;
         void setSpecularColor(const Color &specular);
 
     protected:

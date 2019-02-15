@@ -17,6 +17,13 @@ namespace scene {
         void b(float b);
 
         Color mul(const Color &c);
+        Color operator*(float f) const;
+        Color &operator*=(float f);
+        friend Color operator*(float f, const Color &c);
+        Color operator+(const Color &c) const;
+        Color &operator+=(const Color &c);
+
+        void clamp();
 
     protected:
         float _r;
