@@ -1,5 +1,5 @@
-#include "math/Point.hpp"
-#include "math/Vector.hpp"
+#include "maths/Point.hpp"
+#include "maths/Vector.hpp"
 
 namespace maths {
     Point::Point() {

@@ -2,7 +2,7 @@
 #define CAMERA_HPP
 
 #include "scene/Entity.hpp"
-#include "math/Ray.hpp"
+#include "maths/Ray.hpp"
 
 namespace scene {
     class Camera : public Entity {

@@ -1,8 +1,8 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
-#include "math/HPoint.hpp"
-#include "math/HVector.hpp"
+#include "maths/HPoint.hpp"
+#include "maths/HVector.hpp"
 
 namespace maths {
     class Matrix {

@@ -1,4 +1,4 @@
-#include "math/HVector.hpp"
+#include "maths/HVector.hpp"
 
 namespace maths {
     HVector::HVector()

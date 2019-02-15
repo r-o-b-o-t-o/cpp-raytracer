@@ -1,4 +1,4 @@
-#include "math/HPoint.hpp"
+#include "maths/HPoint.hpp"
 
 namespace maths {
     HPoint::HPoint()

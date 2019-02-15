@@ -1,4 +1,4 @@
-#include "math/Ray.hpp"
+#include "maths/Ray.hpp"
 
 namespace maths {
     Ray::Ray(float ox, float oy, float oz, float vx, float vy, float vz)

@@ -8,12 +8,12 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 
 set(source_files
         src/main.cpp
-        src/math/Point.cpp
-        src/math/HPoint.cpp
-        src/math/Vector.cpp
-        src/math/HVector.cpp
-        src/math/Ray.cpp
-        src/math/Matrix.cpp
+        src/maths/Point.cpp
+        src/maths/HPoint.cpp
+        src/maths/Vector.cpp
+        src/maths/HVector.cpp
+        src/maths/Ray.cpp
+        src/maths/Matrix.cpp
         src/scene/Entity.cpp
         src/scene/Object.cpp
         src/scene/Sphere.cpp
