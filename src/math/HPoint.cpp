@@ -1,6 +1,6 @@
 #include "math/HPoint.hpp"
 
-namespace Math {
+namespace maths {
     HPoint::HPoint()
             : _w(1.0f),
               Point() {

@@ -3,7 +3,7 @@
 
 #include "Vector.hpp"
 
-namespace Math {
+namespace maths {
     class HVector : public Vector {
     public:
         HVector();

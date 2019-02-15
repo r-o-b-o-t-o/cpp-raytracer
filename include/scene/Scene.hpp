@@ -9,20 +9,20 @@
 #include "scene/Object.hpp"
 #include "scene/Light.hpp"
 
-namespace Scene {
-    class SceneObj {
+namespace scene {
+    class Scene {
     public:
-        SceneObj();
-        explicit SceneObj(YAML::Node root);
-        ~SceneObj();
+        Scene();
+        explicit Scene(YAML::Node root);
+        ~Scene();
 
-        Scene::Light getLight(int);
-        std::vector<Scene::Light> getAllLights();
+        scene::Light getLight(int);
+        std::vector<scene::Light> getAllLights();
         void insertLight(Light);
 
-        Scene::Object* getObj(int);
-        std::vector<Scene::Object*> &getAllObj();
-        void insertObj(Scene::Object*);
+        scene::Object* getObj(int);
+        std::vector<scene::Object*> &getAllObj();
+        void insertObj(scene::Object*);
 
         const Camera &getCamera() const;
         void setCamera(const Camera &camera);
@@ -31,11 +31,11 @@ namespace Scene {
 
     protected:
         Camera camera;
-        std::vector<Scene::Object*> objs;
-        std::vector<Scene::Light> lights;
+        std::vector<scene::Object*> objs;
+        std::vector<scene::Light> lights;
 
         cv::Mat createColorsMat(int height, int width);
-        Scene::Object* nodeToObj(const std::string &type, const YAML::Node &obj);
+        scene::Object* nodeToObj(const std::string &type, const YAML::Node &obj);
     };
 }
 

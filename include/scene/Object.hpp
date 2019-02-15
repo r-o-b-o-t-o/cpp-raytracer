@@ -3,12 +3,12 @@
 
 #include "Entity.hpp"
 
-namespace Scene {
+namespace scene {
     class Object : public Entity {
     public:
-        Object(const Math::Point&);
-        virtual bool intersect(const Math::Ray &ray, Math::Point &impact) const = 0;
-        virtual Math::Ray getNormal(const Math::Point &impact, const Math::Point &observator) const = 0;
+        Object(const maths::Point&);
+        virtual bool intersect(const maths::Ray &ray, maths::Point &impact) const = 0;
+        virtual maths::Ray getNormal(const maths::Point &impact, const maths::Point &observator) const = 0;
     };
 }
 

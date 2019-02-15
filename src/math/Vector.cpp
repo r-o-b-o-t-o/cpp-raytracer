@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-namespace Math {
+namespace maths {
     Vector::Vector() {
         for (float &value : this->values) {
             value = 0.0f;

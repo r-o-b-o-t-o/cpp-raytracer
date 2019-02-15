@@ -2,14 +2,14 @@
 #include <yaml-cpp/yaml.h>
 #include <boost/filesystem.hpp>
 
-#include "scene/SceneObj.hpp"
+#include "scene/Scene.hpp"
 
 void useScene(const std::string &scene) {
     YAML::Node config = YAML::LoadFile(scene);
     std::string sceneName = config["name"].as<std::string>();
     std::cout << "Using scene: " << sceneName << std::endl;
 
-    Scene::SceneObj sceneObj(config);
+    scene::Scene sceneObj(config);
 
     YAML::Node resolution = config["resolution"];
     sceneObj.exportImage(resolution["height"].as<int>(), resolution["width"].as<int>());

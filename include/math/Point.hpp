@@ -4,7 +4,7 @@
 #include <ostream>
 #include <yaml-cpp/yaml.h>
 
-namespace Math {
+namespace maths {
     class Vector; // Forward declaration
 
     class Point {
@@ -54,9 +54,9 @@ namespace Math {
 
 namespace YAML {
     template<>
-    class convert<Math::Point> {
+    class convert<maths::Point> {
     public:
-        static bool decode(const Node &node, Math::Point &rhs) {
+        static bool decode(const Node &node, maths::Point &rhs) {
             if (node["x"].IsNull() || node["y"].IsNull() || node["z"].IsNull()) {
                 return false;
             }

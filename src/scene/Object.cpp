@@ -1,8 +1,8 @@
 #include "scene/Object.hpp"
 
-namespace Scene {
+namespace scene {
 
-    Object::Object(const Math::Point &point): Entity(point){
+    Object::Object(const maths::Point &point): Entity(point){
         
     }
 }

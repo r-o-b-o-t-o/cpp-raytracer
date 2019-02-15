@@ -1,6 +1,6 @@
 #include "math/HVector.hpp"
 
-namespace Math {
+namespace maths {
     HVector::HVector()
             : _w(1.0f),
               Vector() {

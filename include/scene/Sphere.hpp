@@ -3,12 +3,12 @@
 
 #include "Object.hpp"
 
-namespace Scene {
+namespace scene {
     class Sphere : public Object {
     public:
-        Sphere(const Math::Point &point);
-        bool intersect(const Math::Ray &ray, Math::Point &impact) const override;
-        Math::Ray getNormal(const Math::Point &impact, const Math::Point &observator) const override;
+        Sphere(const maths::Point &point);
+        bool intersect(const maths::Ray &ray, maths::Point &impact) const override;
+        maths::Ray getNormal(const maths::Point &impact, const maths::Point &observator) const override;
     };
 }
 

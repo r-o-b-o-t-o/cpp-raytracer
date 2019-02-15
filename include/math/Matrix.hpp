@@ -4,7 +4,7 @@
 #include "math/HPoint.hpp"
 #include "math/HVector.hpp"
 
-namespace Math {
+namespace maths {
     class Matrix {
     public:
         explicit Matrix(int size = 4);

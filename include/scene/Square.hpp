@@ -3,11 +3,11 @@
 
 #include "Plane.hpp"
 
-namespace Scene {
+namespace scene {
     class Square : public Plane {
     public:
-        Square(const Math::Point &point);
-        bool intersect(const Math::Ray &ray, Math::Point &impact) const override;
+        Square(const maths::Point &point);
+        bool intersect(const maths::Ray &ray, maths::Point &impact) const override;
     };
 }
 

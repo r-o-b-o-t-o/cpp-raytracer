@@ -2,13 +2,13 @@
 
 #include <cmath>
 
-namespace Scene {
+namespace scene {
 
-    Plane::Plane(const Math::Point &point): Object(point){
+    Plane::Plane(const maths::Point &point): Object(point){
 
     }
     
-    bool Plane::intersect(const Math::Ray &ray, Math::Point &impact) const {
+    bool Plane::intersect(const maths::Ray &ray, maths::Point &impact) const {
         auto r = this->globalToLocal(ray);
         auto t = -r.getOrigin().z() / r.getVector().z();
         if (fabs(t) < 0.00001f) {
@@ -19,8 +19,8 @@ namespace Scene {
         return true;
     }
 
-    Math::Ray Plane::getNormal(const Math::Point &impact, const Math::Point &observator) const {
-        Math::Ray nal(this->globalToLocal(impact), Math::Vector(0, 0, this->globalToLocal(observator).z()));
+    maths::Ray Plane::getNormal(const maths::Point &impact, const maths::Point &observator) const {
+        maths::Ray nal(this->globalToLocal(impact), maths::Vector(0, 0, this->globalToLocal(observator).z()));
         return this->localToGlobal(nal.normalized());
     }
 }

@@ -1,7 +1,7 @@
 #include "scene/Cube.hpp"
 
-namespace Scene {
-    Cube::Cube(const Math::Point &point): Square(point) {
+namespace scene {
+    Cube::Cube(const maths::Point &point): Square(point) {
         
     }
 }

@@ -4,12 +4,12 @@
 #include "scene/Entity.hpp"
 #include "math/Ray.hpp"
 
-namespace Scene {
+namespace scene {
     class Camera : public Entity {
     public:
-        explicit Camera(Math::Point);
+        explicit Camera(maths::Point);
 
-        Math::Ray getRay(float x, float y) const;
+        maths::Ray getRay(float x, float y) const;
         void setFocal(float);
         float getFocal() const;
 

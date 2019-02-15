@@ -23,7 +23,7 @@ set(source_files
         src/scene/Camera.cpp
         src/scene/Light.cpp
         src/scene/Color.cpp
-        src/scene/SceneObj.cpp
+        src/scene/Scene.cpp
 )
 
 if (NOT YamlCpp_LIBS)

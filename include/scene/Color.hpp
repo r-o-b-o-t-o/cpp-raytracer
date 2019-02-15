@@ -1,7 +1,7 @@
 #ifndef COLOR_HPP
 #define COLOR_HPP
 
-namespace Scene {
+namespace scene {
     class Color {
     public:
         Color() = default;

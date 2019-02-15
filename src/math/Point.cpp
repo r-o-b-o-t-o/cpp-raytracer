@@ -1,7 +1,7 @@
 #include "math/Point.hpp"
 #include "math/Vector.hpp"
 
-namespace Math {
+namespace maths {
     Point::Point() {
         for (float &value : this->values) {
             value = 0.0f;

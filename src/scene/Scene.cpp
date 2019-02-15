@@ -1,16 +1,16 @@
-#include "scene/SceneObj.hpp"
+#include "scene/Scene.hpp"
 #include "scene/Plane.hpp"
 #include "scene/Square.hpp"
 #include "scene/Cube.hpp"
 #include "scene/Sphere.hpp"
 
-namespace Scene {
-    SceneObj::SceneObj() : camera(Scene::Camera(Math::Point())) {
+namespace scene {
+    Scene::Scene() : camera(scene::Camera(maths::Point())) {
 
     }
 
-    SceneObj::SceneObj(YAML::Node root) : camera(root["camera"].as<Math::Point>()) {
-        this->insertLight(Scene::Light(root["light"].as<Math::Point>()));
+    Scene::Scene(YAML::Node root) : camera(root["camera"].as<maths::Point>()) {
+        this->insertLight(scene::Light(root["light"].as<maths::Point>()));
 
         YAML::Node objects = root["objects"];
         for (YAML::const_iterator it = objects.begin(); it != objects.end(); ++it) {
@@ -20,38 +20,38 @@ namespace Scene {
         }
     }
 
-    SceneObj::~SceneObj() {
+    Scene::~Scene() {
         for (auto &obj : this->objs) {
             delete obj;
         }
         this->objs.clear();
     }
 
-    Scene::Light SceneObj::getLight(int i) {
+    scene::Light Scene::getLight(int i) {
         return this->lights[i];
     }
 
-    std::vector<Scene::Light> SceneObj::getAllLights() {
+    std::vector<scene::Light> Scene::getAllLights() {
         return this->lights;
     }
 
-    void SceneObj::insertLight(Scene::Light l) {
+    void Scene::insertLight(scene::Light l) {
         this->lights.push_back(l);
     }
 
-    Scene::Object* SceneObj::getObj(int i) {
+    scene::Object* Scene::getObj(int i) {
         return this->objs[i];
     }
 
-    std::vector<Object*> &SceneObj::getAllObj() {
+    std::vector<Object*> &Scene::getAllObj() {
         return this->objs;
     }
 
-    void SceneObj::insertObj(Object* obj) {
+    void Scene::insertObj(Object* obj) {
         this->objs.push_back(obj);
     }
 
-    cv::Mat SceneObj::createColorsMat(int height, int width) {
+    cv::Mat Scene::createColorsMat(int height, int width) {
         cv::Mat mat(height, width, CV_8UC4);
 
         for (int i = 0; i < mat.rows; ++i) {
@@ -62,9 +62,9 @@ namespace Scene {
                 // y val [0, 1]
                 float y = (float)j / (float)mat.cols;
 
-                Math::Ray ray = this->camera.getRay(x, y);
+                maths::Ray ray = this->camera.getRay(x, y);
                 for (auto &obj : this->objs) {
-                    Math::Point impact;
+                    maths::Point impact;
                     if (obj->intersect(ray, impact)) {
                         //Get color here
                         bgra[0] = cv::saturate_cast<uchar>(0.0f);
@@ -84,7 +84,7 @@ namespace Scene {
         return mat;
     }
 
-    void SceneObj::exportImage(int height, int width) {
+    void Scene::exportImage(int height, int width) {
         std::cout << "Exporting image..." << std::endl;
 
         auto mat = this->createColorsMat(height, width);
@@ -102,22 +102,22 @@ namespace Scene {
         std::cout << "Saved PNG file with alpha data." << std::endl;
     }
 
-    Scene::Object* SceneObj::nodeToObj(const std::string &type, const YAML::Node &obj) {
-        Math::Point p(obj.as<Math::Point>());
+    scene::Object* Scene::nodeToObj(const std::string &type, const YAML::Node &obj) {
+        maths::Point p(obj.as<maths::Point>());
 
-        if (type == "plane") return new Scene::Plane(p);
-        if (type == "square") return new Scene::Square(p);
-        if (type == "cube") return new Scene::Cube(p);
-        if (type == "sphere") return new Scene::Sphere(p);
+        if (type == "plane") return new scene::Plane(p);
+        if (type == "square") return new scene::Square(p);
+        if (type == "cube") return new scene::Cube(p);
+        if (type == "sphere") return new scene::Sphere(p);
 
         return nullptr;
     }
 
-    const Camera &SceneObj::getCamera() const {
+    const Camera &Scene::getCamera() const {
         return camera;
     }
 
-    void SceneObj::setCamera(const Camera &camera) {
-        SceneObj::camera = camera;
+    void Scene::setCamera(const Camera &camera) {
+        Scene::camera = camera;
     }
 }

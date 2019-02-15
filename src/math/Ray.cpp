@@ -1,6 +1,6 @@
 #include "math/Ray.hpp"
 
-namespace Math {
+namespace maths {
     Ray::Ray(float ox, float oy, float oz, float vx, float vy, float vz)
             : origin(ox, oy, oz),
               vector(vx, vy, vz) {

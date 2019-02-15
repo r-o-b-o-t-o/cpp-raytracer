@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 
-namespace Math {
+namespace maths {
     Matrix::Matrix(int size) : Matrix(size, size, 0.0f) {
         for (auto i = 0; i < size; i++) {
             this->at(i, i) = 1.0f;

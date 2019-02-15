@@ -5,21 +5,21 @@
 #include "math/Ray.hpp"
 #include "math/Matrix.hpp"
 
-namespace Scene {
+namespace scene {
     class Entity {
     public:
-        void setPos(Math::Point);
+        void setPos(maths::Point);
         void setPos(float, float, float);
 
-        Math::Point getPos();
+        maths::Point getPos();
         Entity();
-        explicit Entity(Math::Point);
+        explicit Entity(maths::Point);
         virtual ~Entity() = 0;
 
     protected:
-        Math::Point pos;
-        Math::Matrix trans;
-        Math::Matrix transInv;
+        maths::Point pos;
+        maths::Matrix trans;
+        maths::Matrix transInv;
 
         void translate(float x, float y, float z); // effectue une translation de vecteur (x,y,z)
         void rotateX(float deg); // effectue une rotation sur l'axe X, de deg radians
@@ -32,8 +32,8 @@ namespace Scene {
             return trans * in;
         }
 
-        Math::Ray localToGlobal(const Math::Ray &r) const {
-            Math::Ray t = Math::Ray(this->localToGlobal(r.getOrigin()), this->localToGlobal(r.getVector()));
+        maths::Ray localToGlobal(const maths::Ray &r) const {
+            maths::Ray t = maths::Ray(this->localToGlobal(r.getOrigin()), this->localToGlobal(r.getVector()));
             return t;
         }
 
@@ -42,13 +42,13 @@ namespace Scene {
             return transInv * in;
         }
 
-        Math::Ray globalToLocal(const Math::Ray &r) const {
-            Math::Ray t = Math::Ray(this->globalToLocal(r.getOrigin()), this->globalToLocal(r.getVector()));
+        maths::Ray globalToLocal(const maths::Ray &r) const {
+            maths::Ray t = maths::Ray(this->globalToLocal(r.getOrigin()), this->globalToLocal(r.getVector()));
             return t;
         }
     };
 }
 
-inline Scene::Entity::~Entity() = default;
+inline scene::Entity::~Entity() = default;
 
 #endif // ENTITY_HPP

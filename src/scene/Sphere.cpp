@@ -3,14 +3,14 @@
 
 #include <cmath>
 
-namespace Scene {
+namespace scene {
     
-    Sphere::Sphere(const Math::Point &point) : Object(point) {
+    Sphere::Sphere(const maths::Point &point) : Object(point) {
 
     }
 
-    bool Sphere::intersect(const Math::Ray &ray, Math::Point &impact) const {
-        Math::Ray r = this->globalToLocal(ray);
+    bool Sphere::intersect(const maths::Ray &ray, maths::Point &impact) const {
+        maths::Ray r = this->globalToLocal(ray);
         float a = pow(r.getVector()[0], 2)+pow(r.getVector()[1], 2)+pow(r.getVector()[2], 2);
         float b = 2*(r.getOrigin()[0]*r.getVector()[0] + r.getOrigin()[1]*r.getVector()[1] + r.getOrigin()[2]*r.getVector()[2]);
         float c = pow(r.getOrigin()[0], 2)+pow(r.getOrigin()[1], 2)+pow(r.getOrigin()[2], 2) - 1;
@@ -41,10 +41,10 @@ namespace Scene {
         return true;
     }
 
-    Math::Ray Sphere::getNormal(const Math::Point &impact, const Math::Point &observator) const {
+    maths::Ray Sphere::getNormal(const maths::Point &impact, const maths::Point &observator) const {
         auto localImpact = globalToLocal(impact);
-        Math::Vector localObs(globalToLocal(observator));
-        Math::Ray nal(localImpact, Math::Vector(localImpact));
+        maths::Vector localObs(globalToLocal(observator));
+        maths::Ray nal(localImpact, maths::Vector(localImpact));
         if (localObs.norm() <= 1.0) {
             nal.setVector(-nal.getVector());
         }

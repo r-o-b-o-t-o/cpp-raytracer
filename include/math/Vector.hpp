@@ -3,7 +3,7 @@
 
 #include "Point.hpp"
 
-namespace Math {
+namespace maths {
     class Vector {
     public:
         Vector();

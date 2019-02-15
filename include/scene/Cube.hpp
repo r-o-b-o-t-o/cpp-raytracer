@@ -3,10 +3,10 @@
 
 #include "Square.hpp"
 
-namespace Scene {
+namespace scene {
     class Cube : public Square {
     public:
-        Cube(const Math::Point &point);
+        Cube(const maths::Point &point);
 
     };
 }

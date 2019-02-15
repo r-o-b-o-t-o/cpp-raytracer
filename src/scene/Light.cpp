@@ -1,24 +1,24 @@
 #include "scene/Light.hpp"
 
-namespace Scene {
-    Light::Light(const Math::Point &point) : Entity(point) {
+namespace scene {
+    Light::Light(const maths::Point &point) : Entity(point) {
 
     }
 
-    Math::Ray Light::getRayToLight(const Math::Point &p) const {
-        return Math::Ray(p, this->getVectorToLight(p));
+    maths::Ray Light::getRayToLight(const maths::Point &p) const {
+        return maths::Ray(p, this->getVectorToLight(p));
     }
 
-    Math::Ray Light::getRayFromLight(const Math::Point &p) const {
-        return Math::Ray(this->pos, this->getVectorFromLight(p));
+    maths::Ray Light::getRayFromLight(const maths::Point &p) const {
+        return maths::Ray(this->pos, this->getVectorFromLight(p));
     }
 
-    Math::Vector Light::getVectorToLight(const Math::Point &p) const {
-        return Math::Vector(this->pos - p);
+    maths::Vector Light::getVectorToLight(const maths::Point &p) const {
+        return maths::Vector(this->pos - p);
     }
 
-    Math::Vector Light::getVectorFromLight(const Math::Point &p) const {
-        return Math::Vector(p - this->pos);
+    maths::Vector Light::getVectorFromLight(const maths::Point &p) const {
+        return maths::Vector(p - this->pos);
     }
 
     const Color &Light::getDiffuseColor() const {

@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-namespace Scene {
+namespace scene {
     Color::Color(float r, float g, float b)
             : _r(r), _g(g), _b(b) {
 

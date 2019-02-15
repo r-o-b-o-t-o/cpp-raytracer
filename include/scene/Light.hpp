@@ -4,15 +4,15 @@
 #include "Entity.hpp"
 #include "Color.hpp"
 
-namespace Scene {
+namespace scene {
     class Light : public Entity {
     public:
-        explicit Light(const Math::Point &point);
+        explicit Light(const maths::Point &point);
 
-        Math::Ray getRayToLight(const Math::Point &p) const;
-        Math::Ray getRayFromLight(const Math::Point &p) const;
-        Math::Vector getVectorToLight(const Math::Point &p) const;
-        Math::Vector getVectorFromLight(const Math::Point &p) const;
+        maths::Ray getRayToLight(const maths::Point &p) const;
+        maths::Ray getRayFromLight(const maths::Point &p) const;
+        maths::Vector getVectorToLight(const maths::Point &p) const;
+        maths::Vector getVectorFromLight(const maths::Point &p) const;
 
         const Color &getDiffuseColor() const;
         void setDiffuseColor(const Color &diffuse);

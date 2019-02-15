@@ -2,13 +2,13 @@
 
 #include <cmath>
 
-namespace Scene {
-    Square::Square(const Math::Point &point) : Plane(point){
+namespace scene {
+    Square::Square(const maths::Point &point) : Plane(point){
 
     }
 
-    bool Square::intersect(const Math::Ray &ray, Math::Point &impact) const {
-        Math::Ray rayon = this->globalToLocal(ray);
+    bool Square::intersect(const maths::Ray &ray, maths::Point &impact) const {
+        maths::Ray rayon = this->globalToLocal(ray);
         auto t = -(rayon.getOrigin()[2]/rayon.getVector()[2]);
         
         if (t < 0)
