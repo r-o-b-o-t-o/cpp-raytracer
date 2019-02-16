@@ -11,11 +11,12 @@ namespace scene {
     bool Plane::intersect(const maths::Ray &ray, maths::Point &impact) const {
         auto r = this->globalToLocal(ray);
         auto t = -r.getOrigin().z() / r.getVector().z();
-        if (fabs(t) < 0.00001f) {
+        if (t < 0.0f) {
             return false;
         }
 
-        impact = ray.getOrigin() + t * ray.getVector();
+        impact = r.getOrigin() + t * r.getVector();
+        impact = this->localToGlobal(impact);
         return true;
     }
 

@@ -73,6 +73,7 @@ objects:
       x: 0.0
       y: 0.4
       z: -1.25
+    scale: 1.2
     material:
       ambiant:
         r: 25
