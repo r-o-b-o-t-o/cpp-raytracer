@@ -4,6 +4,8 @@
 #include "scene/Cube.hpp"
 #include "scene/Sphere.hpp"
 #include "maths/Point.hpp"
+#include "maths/Vector.hpp"
+#include "maths/Ray.hpp"
 
 namespace scene {
     Scene::Scene() : camera(Camera(maths::Point())) {
@@ -53,11 +55,18 @@ namespace scene {
         this->objs.push_back(obj);
     }
 
-    bool Scene::isShadow(const maths::Point& impact, const Light& light){
+    bool Scene::isShadow(const maths::Point& impact, const Light& light) const {
+        maths::Ray toLight = light.getRayToLight(impact);
         for (auto& obj : this->objs)
         {
-
+            maths::Point temp;
+            if (obj->intersect(toLight, temp))
+            {
+                if (maths::Vector(temp - impact).norm() < maths::Vector(light.getPos() - impact).norm())
+                    return true;
+            }
         }
+        return false;
     }
 
     cv::Mat Scene::render(int height, int width) const {
@@ -78,6 +87,7 @@ namespace scene {
 
                 maths::Ray ray = this->camera.getRay(x, y);
                 maths::Point impact;
+                maths::Point closeImpact;
                 float minDist = -1.0f;
                 float impactDist;
                 scene::Object *closest = nullptr;
@@ -86,11 +96,13 @@ namespace scene {
                         impactDist = (maths::Vector(impact) - maths::Vector(this->camera.getPos())).norm();
                         if (minDist < 0.0f || impactDist < minDist) {
                             closest = obj;
+                            minDist = impactDist;
+                            closeImpact = impact;
                         }
                     }
                 }
                 if (closest != nullptr) {
-                    Color c = this->camera.getImpactColor(ray, *closest, impact, *this);
+                    Color c = this->camera.getImpactColor(ray, *closest, closeImpact, *this);
                     bgra[0] = cv::saturate_cast<uchar>(c.b() * 255.0f);
                     bgra[1] = cv::saturate_cast<uchar>(c.g() * 255.0f);
                     bgra[2] = cv::saturate_cast<uchar>(c.r() * 255.0f);

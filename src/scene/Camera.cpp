@@ -4,11 +4,12 @@
 
 namespace scene {
     Camera::Camera() : Entity() {
-
+        this->shadow = false;
     }
 
     Camera::Camera(maths::Point point) : Entity(point) {
         this->focal = 2.0f;
+        this->shadow = false;
     }
 
     //methode de la classe Camera
@@ -46,7 +47,9 @@ namespace scene {
 
         for (auto &light : scene.getAllLights()) {
             auto L = light.getVectorToLight(impact);
-            //std::cout << "VectorToLight :" << L[0] << ","<<L[1]<< "," <<L[2] << std::endl;
+            //std::cout << "VectorToLight :" << L[0] << ","<<L[1]<< "," <<L[2] << std::endl
+            if (this->shadow && scene.isShadow(impact, light))
+                continue;
             auto dot = L.dot(N);
             if (dot > 0.0f) {
                 //std::cout << "dot > 0.0" << std::endl;
@@ -87,5 +90,11 @@ namespace scene {
     }
     float Camera::getSize() const{
         return this->size;
+    }
+    void Camera::setShadow(bool s){
+        this->shadow = s;
+    }
+    bool Camera::getShadow() const{
+        return this->shadow;
     }
 }

@@ -24,6 +24,8 @@ namespace scene {
         float getHeight() const;
         void setSize(float);
         float getSize() const;
+        void setShadow(bool);
+        bool getShadow() const;
         scene::Color getImpactColor(const maths::Ray &ray, const scene::Object &obj, const maths::Point &impact, const Scene &sc) const;
 
     protected:
@@ -31,6 +33,7 @@ namespace scene {
         float size;
         float height;
         float width;
+        bool shadow;
     };
 }
 
@@ -43,9 +46,14 @@ namespace YAML {
             rhs.fromYaml(node);
             auto focal = node["focal"];
             auto resolution = node["resolution"];
+            auto shadow = node["shadow"];
+            
 
             if (focal) {
                 rhs.setFocal(focal.as<float>());
+            }
+            if (shadow) {
+                rhs.setShadow(shadow.as<bool>());
             }
             if (resolution)
             {

@@ -25,6 +25,7 @@ namespace scene {
         void insertObj(Object*);
 
         const Camera &getCamera() const;
+        bool isShadow(const maths::Point& impact, const Light& light) const;
         void setCamera(const Camera &camera);
         
         void exportImage(const std::string &name);
