@@ -98,8 +98,10 @@ namespace scene {
 
         try {
             imwrite(imgName, mat, compressionParams);
-            imshow("Raytracing", mat);
-            cv::waitKey(0);
+#ifdef _WIN32
+            imgName = "\"" + imgName + "\"";
+            system(imgName.c_str());
+#endif
         } catch (std::runtime_error &ex) {
             std::cerr << "Exception converting image to PNG format: " << ex.what() << std::endl;
             return;
