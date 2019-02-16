@@ -105,16 +105,16 @@ namespace scene {
         auto rot = node["rotation"];
         auto scale = node["scale"];
 
-        if (pos) {
-            auto p = pos.as<maths::Point>();
-            this->setPos(p);
-        }
-
         if (rot) {
             auto r = rot.as<maths::Point>();
             this->rotateX(r.x());
             this->rotateY(r.y());
             this->rotateZ(r.z());
+        }
+
+        if (pos) {
+            auto p = pos.as<maths::Point>();
+            this->setPos(p);
         }
 
         if (scale) {

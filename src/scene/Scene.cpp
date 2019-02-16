@@ -84,8 +84,11 @@ namespace scene {
         return mat;
     }
 
-    void Scene::exportImage(int height, int width) {
+    void Scene::exportImage() {
         std::cout << "Exporting image..." << std::endl;
+
+        int height = static_cast<int>(this->camera.getHeight());
+        int width = static_cast<int>(this->camera.getWidth());
 
         auto mat = this->render(height, width);
 

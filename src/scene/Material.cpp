@@ -5,7 +5,7 @@ namespace scene {
             : ka(scene::Color()),
               kd(scene::Color()),
               ks(scene::Color()),
-              shininess(0.2f) {
+              shininess(3.0f) {
 
     }
 
@@ -13,7 +13,7 @@ namespace scene {
             : ka(ka),
               kd(kd),
               ks(ks),
-              shininess(0.2f) {
+              shininess(3.0f) {
 
     }
 
