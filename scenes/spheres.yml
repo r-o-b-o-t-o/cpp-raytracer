@@ -21,8 +21,8 @@ camera:
     height: 480
   position:
     x: 0.0
-    y: -0.75
-    z: 0.5
+    y: 0.0
+    z: 0.0
 
 objects:
   red:
