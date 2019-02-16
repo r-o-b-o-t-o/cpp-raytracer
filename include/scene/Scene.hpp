@@ -27,7 +27,7 @@ namespace scene {
         const Camera &getCamera() const;
         void setCamera(const Camera &camera);
 
-        void exportImage(int height, int width);
+        void exportImage(const std::string &name, int height, int width);
 
     protected:
         Camera camera;

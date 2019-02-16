@@ -12,7 +12,7 @@ void useScene(const std::string &scene) {
     scene::Scene sceneObj(config);
 
     YAML::Node resolution = config["resolution"];
-    sceneObj.exportImage(resolution["height"].as<int>(), resolution["width"].as<int>());
+    sceneObj.exportImage(sceneName, resolution["height"].as<int>(), resolution["width"].as<int>());
 }
 
 int main(int argv, char** argc) {

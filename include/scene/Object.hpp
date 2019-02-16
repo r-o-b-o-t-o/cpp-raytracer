@@ -10,9 +10,15 @@ namespace scene {
         Object();
         explicit Object(const maths::Point&);
 
-        scene::Material getMaterial(const maths::Point &point) const;
+        const scene::Material &getMaterial(const maths::Point &point) const;
         virtual bool intersect(const maths::Ray &ray, maths::Point &impact) const = 0;
         virtual maths::Ray getNormal(const maths::Point &impact, const maths::Point &observator) const = 0;
+
+    protected:
+        scene::Material material;
+
+    public:
+        void fromYaml(const YAML::Node &node) override;
     };
 }
 

@@ -15,7 +15,8 @@ namespace scene {
 
         YAML::Node objects = root["objects"];
         for (YAML::const_iterator it = objects.begin(); it != objects.end(); ++it) {
-            std::string type = it->first.as<std::string>();
+            std::string name = it->first.as<std::string>();
+            std::string type = it->second["type"].as<std::string>();
             this->insertObj(this->nodeToObj(type, it->second));
         }
     }
@@ -84,17 +85,21 @@ namespace scene {
         return mat;
     }
 
-    void Scene::exportImage(int height, int width) {
-        std::cout << "Exporting image..." << std::endl;
+    void Scene::exportImage(const std::string &name, int height, int width) {
+        std::string imgName(name);
+        imgName.append(".png");
+        std::cout << "Exporting image to \"" << imgName << "\"..." << std::endl;
 
         auto mat = this->render(height, width);
 
-        std::vector<int> compression_params;
-        compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
-        compression_params.push_back(9);
+        std::vector<int> compressionParams;
+        compressionParams.push_back(CV_IMWRITE_PNG_COMPRESSION);
+        compressionParams.push_back(9);
 
         try {
-            imwrite("alpha.png", mat, compression_params);
+            imwrite(imgName, mat, compressionParams);
+            imgName = "\"" + imgName + "\"";
+            system(imgName.c_str());
         } catch (std::runtime_error &ex) {
             std::cerr << "Exception converting image to PNG format: " << ex.what() << std::endl;
             return;

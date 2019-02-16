@@ -8,11 +8,8 @@ namespace scene {
               transInv(maths::Matrix()) {
     }
 
-    Entity::Entity(maths::Point point)
-            : trans(maths::Matrix()),
-              transInv(maths::Matrix()) {
-        this->pos = point;
-        this->translate(point[0], point[1], point[2]);
+    Entity::Entity(const maths::Point &point) : Entity() {
+        this->translate(maths::Vector(point));
     }
 
     void Entity::setPos(const maths::Point &p) {
@@ -45,6 +42,12 @@ namespace scene {
         this->transInv = this->trans.inverse();
     }
 
+    void Entity::rotate(const maths::Vector &v) {
+        this->rotateX(v.x());
+        this->rotateY(v.y());
+        this->rotateZ(v.z());
+    }
+
     // effectue une rotation sur l'axe X, de deg radians
     void Entity::rotateX(float deg) {
         maths::Matrix mat = maths::Matrix();
@@ -55,7 +58,6 @@ namespace scene {
         mat(1, 2) = -sinf(deg);
 
         this->trans = mat * this->trans;
-
         this->transInv = this->trans.inverse();
     }
 
@@ -69,7 +71,6 @@ namespace scene {
         mat(2, 0) = -sinf(deg);
 
         this->trans = mat * this->trans;
-
         this->transInv = this->trans.inverse();
     }
 
@@ -83,7 +84,22 @@ namespace scene {
         mat(0, 1) = -sinf(deg);
 
         this->trans = mat * this->trans;
+        this->transInv = this->trans.inverse();
+    }
 
+    void Entity::scale(const maths::Vector &v) {
+        this->scale(v.x(), v.y(), v.z());
+    }
+
+    // effectue un redimensionnement de facteurs (x,y,z)
+    void Entity::scale(float x, float y, float z) {
+        maths::Matrix mat = maths::Matrix(3, 3);
+
+        mat(0, 0) = x;
+        mat(1, 1) = y;
+        mat(2, 2) = z;
+
+        this->trans = mat * this->trans;
         this->transInv = this->trans.inverse();
     }
 
@@ -96,7 +112,6 @@ namespace scene {
         mat(2, 2) = factor;
 
         this->trans = mat * this->trans;
-
         this->transInv = this->trans.inverse();
     }
 
@@ -105,20 +120,22 @@ namespace scene {
         auto rot = node["rotation"];
         auto scale = node["scale"];
 
-        if (pos) {
-            auto p = pos.as<maths::Point>();
-            this->setPos(p);
+        if (scale) {
+            if (scale.IsScalar()) {
+                this->scale(scale.as<float>());
+            } else {
+                this->scale(scale.as<maths::Vector>());
+            }
         }
 
         if (rot) {
-            auto r = rot.as<maths::Point>();
-            this->rotateX(r.x());
-            this->rotateY(r.y());
-            this->rotateZ(r.z());
+            auto v = rot.as<maths::Vector>();
+            this->rotate(v);
         }
 
-        if (scale) {
-            this->scale(scale.as<float>());
+        if (pos) {
+            auto p = pos.as<maths::Point>();
+            this->setPos(p);
         }
     }
 }

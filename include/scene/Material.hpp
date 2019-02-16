@@ -26,6 +26,34 @@ namespace scene {
         Color ks;
         float shininess;
     };
-
 }
+
+#include <yaml-cpp/yaml.h>
+namespace YAML {
+    template<>
+    class convert<scene::Material> {
+    public:
+        static bool decode(const Node &node, scene::Material &rhs) {
+            auto ambiant = node["ambiant"];
+            auto diffuse = node["diffuse"];
+            auto specular = node["specular"];
+            auto shininess = node["shininess"];
+
+            if (ambiant) {
+                rhs.setKa(ambiant.as<scene::Color>());
+            }
+            if (diffuse) {
+                rhs.setKd(diffuse.as<scene::Color>());
+            }
+            if (specular) {
+                rhs.setKs(specular.as<scene::Color>());
+            }
+            if (shininess) {
+                rhs.setShininess(shininess.as<float>());
+            }
+            return true;
+        }
+    };
+}
+
 #endif // MATERIAL_HPP
