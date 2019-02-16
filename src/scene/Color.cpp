@@ -73,4 +73,9 @@ namespace scene {
         this->clamp();
         return *this;
     }
+
+    std::ostream &operator<<(std::ostream &s, const Color &c) {
+        s << "Color (R: " << c.r() << ", G: " << c.g() << ", B: " << c.b() << ")";
+        return s;
+    }
 }

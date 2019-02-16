@@ -11,6 +11,7 @@ namespace scene {
 
     class Camera : public Entity {
     public:
+        Camera();
         explicit Camera(maths::Point);
 
         maths::Ray getRay(float x, float y) const;
@@ -20,6 +21,23 @@ namespace scene {
 
     protected:
         float focal;
+    };
+}
+
+#include <yaml-cpp/yaml.h>
+namespace YAML {
+    template<>
+    class convert<scene::Camera> {
+    public:
+        static bool decode(const Node &node, scene::Camera &rhs) {
+            rhs.fromYaml(node);
+            auto focal = node["focal"];
+
+            if (focal) {
+                rhs.setFocal(focal.as<float>());
+            }
+            return true;
+        }
     };
 }
 

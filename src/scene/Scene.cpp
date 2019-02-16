@@ -5,18 +5,18 @@
 #include "scene/Sphere.hpp"
 
 namespace scene {
-    Scene::Scene() : camera(scene::Camera(maths::Point())) {
+    Scene::Scene() : camera(Camera(maths::Point())) {
 
     }
 
-    Scene::Scene(YAML::Node root) : camera(root["camera"].as<maths::Point>()) {
-        this->insertLight(scene::Light(root["light"].as<maths::Point>()));
+    Scene::Scene(YAML::Node root) {
+        this->camera = root["camera"].as<Camera>();
+        this->insertLight(root["light"].as<Light>());
 
         YAML::Node objects = root["objects"];
         for (YAML::const_iterator it = objects.begin(); it != objects.end(); ++it) {
-            std::string objName = it->first.as<std::string>();
-            std::string type = objects[objName]["type"].as<std::string>();
-            this->insertObj(nodeToObj(type, objects[objName]));
+            std::string type = it->first.as<std::string>();
+            this->insertObj(this->nodeToObj(type, it->second));
         }
     }
 
@@ -27,20 +27,20 @@ namespace scene {
         this->objs.clear();
     }
 
-    const scene::Light &Scene::getLight(int i) const {
+    const Light &Scene::getLight(int i) const {
         return this->lights[i];
     }
 
-    const std::vector<scene::Light> &Scene::getAllLights() const {
+    const std::vector<Light> &Scene::getAllLights() const {
         return this->lights;
     }
 
-    void Scene::insertLight(scene::Light l) {
+    void Scene::insertLight(Light l) {
         this->lights.push_back(l);
     }
 
-    scene::Object* Scene::getObj(int i) {
-        return this->objs[i];
+    const Object &Scene::getObj(int i) {
+        return (*this->objs[i]);
     }
 
     const std::vector<Object*> &Scene::getAllObj() {
@@ -51,31 +51,30 @@ namespace scene {
         this->objs.push_back(obj);
     }
 
-    cv::Mat Scene::createColorsMat(int height, int width) {
+    cv::Mat Scene::render(int height, int width) const {
         cv::Mat mat(height, width, CV_8UC4);
 
         for (int i = 0; i < mat.rows; ++i) {
             for (int j = 0; j < mat.cols; ++j) {
                 auto &bgra = mat.at<cv::Vec4b>(i, j);
-                bgra[0] = cv::saturate_cast<uchar>(0.0f);
-                bgra[1] = cv::saturate_cast<uchar>(0.0f);
-                bgra[2] = cv::saturate_cast<uchar>(0.0f);
-                bgra[3] = cv::saturate_cast<uchar>(255.0f);
+                bgra[0] = static_cast<uchar>(0.0f);
+                bgra[1] = static_cast<uchar>(0.0f);
+                bgra[2] = static_cast<uchar>(0.0f);
+                bgra[3] = static_cast<uchar>(255.0f);
 
                 // x val [0, 1]
-                float x = (float)i / (float)mat.rows;
+                float x = (float)j / (float)mat.cols;
                 // y val [0, 1]
-                float y = (float)j / (float)mat.cols;
+                float y = (float)i / (float)mat.rows;
 
                 maths::Ray ray = this->camera.getRay(x, y);
+                maths::Point impact;
                 for (auto &obj : this->objs) {
-                    maths::Point impact;
                     if (obj->intersect(ray, impact)) {
-                        //Get color here
-                        bgra[0] = cv::saturate_cast<uchar>(0.0f);
-                        bgra[1] = cv::saturate_cast<uchar>(128.0f);
-                        bgra[2] = cv::saturate_cast<uchar>(0.0f);
-                        bgra[3] = cv::saturate_cast<uchar>(255.0f);
+                        Color c = this->camera.getImpactColor(ray, *obj, impact, *this);
+                        bgra[0] = cv::saturate_cast<uchar>(c.b() * 255.0f);
+                        bgra[1] = cv::saturate_cast<uchar>(c.g() * 255.0f);
+                        bgra[2] = cv::saturate_cast<uchar>(c.r() * 255.0f);
                         break;
                     }
                 }
@@ -88,7 +87,7 @@ namespace scene {
     void Scene::exportImage(int height, int width) {
         std::cout << "Exporting image..." << std::endl;
 
-        auto mat = this->createColorsMat(height, width);
+        auto mat = this->render(height, width);
 
         std::vector<int> compression_params;
         compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
@@ -100,18 +99,21 @@ namespace scene {
             std::cerr << "Exception converting image to PNG format: " << ex.what() << std::endl;
             return;
         }
-        std::cout << "Saved PNG file with alpha data." << std::endl;
+        std::cout << "Saved PNG file." << std::endl;
     }
 
-    scene::Object* Scene::nodeToObj(const std::string &type, const YAML::Node &obj) {
-        maths::Point p(obj.as<maths::Point>());
+    Object* Scene::nodeToObj(const std::string &type, const YAML::Node &node) {
+        Object *obj = nullptr;
 
-        if (type == "plane") return new scene::Plane(p);
-        if (type == "square") return new scene::Square(p);
-        if (type == "cube") return new scene::Cube(p);
-        if (type == "sphere") return new scene::Sphere(p);
+        if (type == "plane") obj = new Plane();
+        if (type == "square") obj = new Square();
+        if (type == "cube") obj = new Cube();
+        if (type == "sphere") obj = new Sphere();
 
-        return nullptr;
+        if (obj != nullptr) {
+            obj->fromYaml(node);
+        }
+        return obj;
     }
 
     const Camera &Scene::getCamera() const {

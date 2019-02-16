@@ -2,7 +2,6 @@
 #define POINT_HPP
 
 #include <ostream>
-#include <yaml-cpp/yaml.h>
 
 namespace maths {
     class Vector; // Forward declaration
@@ -52,18 +51,21 @@ namespace maths {
     };
 }
 
+#include <yaml-cpp/yaml.h>
 namespace YAML {
     template<>
     class convert<maths::Point> {
     public:
         static bool decode(const Node &node, maths::Point &rhs) {
-            if (node["x"].IsNull() || node["y"].IsNull() || node["z"].IsNull()) {
+            auto x = node["x"], y = node["y"], z = node["z"];
+
+            if (!x || !y || !z) {
                 return false;
             }
 
-            rhs.x(node["x"].as<float>());
-            rhs.y(node["y"].as<float>());
-            rhs.z(node["z"].as<float>());
+            rhs.x(x.as<float>());
+            rhs.y(y.as<float>());
+            rhs.z(z.as<float>());
             return true;
         }
     };

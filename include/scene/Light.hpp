@@ -7,6 +7,7 @@
 namespace scene {
     class Light : public Entity {
     public:
+        Light();
         explicit Light(const maths::Point &point);
 
         maths::Ray getRayToLight(const maths::Point &p) const;
@@ -22,6 +23,27 @@ namespace scene {
     protected:
         Color diffuse;
         Color specular;
+    };
+}
+
+#include <yaml-cpp/yaml.h>
+namespace YAML {
+    template<>
+    class convert<scene::Light> {
+    public:
+        static bool decode(const Node &node, scene::Light &rhs) {
+            rhs.fromYaml(node);
+            auto diffuse = node["diffuse"];
+            auto specular = node["specular"];
+
+            if (diffuse) {
+                rhs.setDiffuseColor(diffuse.as<scene::Color>());
+            }
+            if (specular) {
+                rhs.setSpecularColor(specular.as<scene::Color>());
+            }
+            return true;
+        }
     };
 }
 

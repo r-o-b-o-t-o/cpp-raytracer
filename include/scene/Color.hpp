@@ -1,6 +1,8 @@
 #ifndef COLOR_HPP
 #define COLOR_HPP
 
+#include <ostream>
+
 namespace scene {
     class Color {
     public:
@@ -25,10 +27,32 @@ namespace scene {
 
         void clamp();
 
+        friend std::ostream &operator<<(std::ostream &s, const Color &c);
+
     protected:
         float _r;
         float _g;
         float _b;
+    };
+}
+
+#include <yaml-cpp/yaml.h>
+namespace YAML {
+    template<>
+    class convert<scene::Color> {
+    public:
+        static bool decode(const Node &node, scene::Color &rhs) {
+            auto r = node["r"], g = node["g"], b = node["b"];
+
+            if (!r || !g || !b) {
+                return false;
+            }
+
+            rhs.r(r.as<float>() / 255.0f);
+            rhs.g(g.as<float>() / 255.0f);
+            rhs.b(b.as<float>() / 255.0f);
+            return true;
+        }
     };
 }
 

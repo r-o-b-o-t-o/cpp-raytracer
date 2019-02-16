@@ -7,6 +7,7 @@
 namespace scene {
     class Object : public Entity {
     public:
+        Object();
         explicit Object(const maths::Point&);
 
         scene::Material getMaterial(const maths::Point &point) const;

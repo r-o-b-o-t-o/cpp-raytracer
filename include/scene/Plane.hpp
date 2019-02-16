@@ -6,6 +6,7 @@
 namespace scene {
     class Plane : public Object {
     public:
+        Plane() = default;
         explicit Plane(const maths::Point &point);
 
         bool intersect(const maths::Ray &ray, maths::Point &impact) const override;

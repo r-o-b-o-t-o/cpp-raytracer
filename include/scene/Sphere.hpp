@@ -6,6 +6,7 @@
 namespace scene {
     class Sphere : public Object {
     public:
+        Sphere() = default;
         explicit Sphere(const maths::Point &point);
 
         bool intersect(const maths::Ray &ray, maths::Point &impact) const override;

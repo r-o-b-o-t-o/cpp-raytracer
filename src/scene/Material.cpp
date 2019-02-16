@@ -1,9 +1,24 @@
 #include "scene/Material.hpp"
 
 namespace scene {
-    Material::Material() : ka(scene::Color()), kd(scene::Color()), ks(scene::Color()),
-                           shininess(0.2f) {
+    Material::Material()
+            : ka(scene::Color()),
+              kd(scene::Color()),
+              ks(scene::Color()),
+              shininess(0.2f) {
 
+    }
+
+    Material::Material(Color ka, Color kd, Color ks)
+            : ka(ka),
+              kd(kd),
+              ks(ks),
+              shininess(0.2f) {
+
+    }
+
+    Material::Material(Color ka, Color kd, Color ks, float shininess) : Material(ka, kd, ks) {
+        this->shininess = shininess;
     }
 
     scene::Color Material::getKa() const {
@@ -22,7 +37,7 @@ namespace scene {
         return this->shininess;
     }
 
-    void Material::setShininess(int s) {
+    void Material::setShininess(float s) {
         this->shininess = s;
     }
 

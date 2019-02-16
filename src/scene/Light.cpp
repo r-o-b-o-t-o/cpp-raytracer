@@ -1,7 +1,14 @@
 #include "scene/Light.hpp"
 
 namespace scene {
-    Light::Light(const maths::Point &point) : Entity(point) {
+    Light::Light() : Light(maths::Point()) {
+
+    }
+
+    Light::Light(const maths::Point &point)
+            : Entity(point),
+              diffuse(255.0f, 255.0f, 255.0f),
+              specular(255.0f, 255.0f, 255.0f) {
 
     }
 

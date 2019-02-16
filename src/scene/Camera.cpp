@@ -2,6 +2,10 @@
 #include "scene/Scene.hpp"
 
 namespace scene {
+    Camera::Camera() : Entity() {
+
+    }
+
     Camera::Camera(maths::Point point) : Entity(point) {
         this->focal = 2.0f;
     }
@@ -29,19 +33,20 @@ namespace scene {
     //Retourne la couleur au point d'impact entre l'objet et le rayon, en fonction des éléments de la scène.
     //Le modèle d'illumination est ici celui de Phong.
     scene::Color Camera::getImpactColor(const maths::Ray &ray, const scene::Object &obj, const maths::Point &impact, const scene::Scene &scene) const {
-        maths::Ray nal = obj.getNormal(impact, ray.getOrigin());
-        scene::Material t = obj.getMaterial(impact);
-        scene::Color col = t.getKa();
-        auto lights = scene.getAllLights().size();
+        auto m = obj.getMaterial(impact);
+        Color ambiant(1.0f, 1.0f, 1.0f); // TODO
+        Color col = m.getKa().mul(ambiant);
+        auto N = obj.getNormal(impact, ray.getOrigin()).getVector();
 
-        for (int i = 0; i < lights; i++) {
-            auto &lum = scene.getLight(i);
-            float coef = lum.getVectorToLight(impact).dot(nal.getVector());
-            auto spec = (2 * coef * nal.getVector()) - lum.getVectorToLight(impact);
+        for (auto &light : scene.getAllLights()) {
+            auto L = light.getVectorToLight(impact);
+            auto dot = L.dot(N);
+            if (dot > 0.0f) {
+                col += dot * m.getKd().mul(light.getDiffuseColor());
 
-            if (coef > 0) {
-                col += coef * t.getKd().mul(lum.getDiffuseColor());
-                col += lum.getSpecularColor().mul(t.getKs() * powf(spec.dot(-ray.getVector()), t.getShininess()));
+                auto R = 2.0f * dot * N - L;
+                auto V = -ray.getVector();
+                col += m.getKs().mul(light.getSpecularColor()) * dot * powf(R.dot(V), m.getShininess());
             }
         }
 

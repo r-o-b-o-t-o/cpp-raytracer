@@ -16,13 +16,13 @@ namespace scene {
         explicit Scene(YAML::Node root);
         ~Scene();
 
-        const scene::Light &getLight(int) const;
-        const std::vector<scene::Light> &getAllLights() const;
+        const Light &getLight(int) const;
+        const std::vector<Light> &getAllLights() const;
         void insertLight(Light);
 
-        scene::Object* getObj(int);
-        const std::vector<scene::Object*> &getAllObj();
-        void insertObj(scene::Object*);
+        const Object &getObj(int);
+        const std::vector<Object*> &getAllObj();
+        void insertObj(Object*);
 
         const Camera &getCamera() const;
         void setCamera(const Camera &camera);
@@ -31,11 +31,11 @@ namespace scene {
 
     protected:
         Camera camera;
-        std::vector<scene::Object*> objs;
-        std::vector<scene::Light> lights;
+        std::vector<Object*> objs;
+        std::vector<Light> lights;
 
-        cv::Mat createColorsMat(int height, int width);
-        scene::Object* nodeToObj(const std::string &type, const YAML::Node &obj);
+        cv::Mat render(int height, int width) const;
+        Object* nodeToObj(const std::string &type, const YAML::Node &obj);
     };
 }
 

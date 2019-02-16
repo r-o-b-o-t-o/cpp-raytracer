@@ -2,17 +2,32 @@ name: "First scene 720p"
 resolution:
   width: 1280
   height: 720
+
 light:
-  x: 0.0
-  y: 0.0
-  z: 0.0
-camera:
-  x: 0.0
-  y: 0.0
-  z: 0.0
-objects:
-  obj1:
-    type: "sphere"
-    x: 1.0
+  position:
+    x: 0.0
     y: 0.0
-    z: -1.0
+    z: 0.0
+  diffuse:
+    r: 204.0
+    g: 204.0
+    b: 204.0
+  specular:
+    r: 128.0
+    g: 128.0
+    b: 128.0
+
+camera:
+  focal: 0.2
+  position:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+
+objects:
+  sphere:
+    name: "Blue Sphere"
+    position:
+      x: 0.25
+      y: 0.0
+      z: -1.25

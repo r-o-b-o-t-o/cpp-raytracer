@@ -6,6 +6,7 @@
 namespace scene {
     class Cube : public Object {
     public:
+        Cube() = default;
         explicit Cube(const maths::Point &point);
 
         bool intersect(const maths::Ray &ray, maths::Point &impact) const override;

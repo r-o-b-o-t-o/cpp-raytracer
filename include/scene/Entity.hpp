@@ -5,22 +5,27 @@
 #include "maths/Ray.hpp"
 #include "maths/Matrix.hpp"
 
+#include <yaml-cpp/yaml.h>
+
 namespace scene {
     class Entity {
     public:
-        void setPos(maths::Point);
-        void setPos(float, float, float);
-
-        maths::Point getPos();
         Entity();
         explicit Entity(maths::Point);
         virtual ~Entity() = 0;
 
+        const maths::Point &getPos() const;
+        void setPos(const maths::Point &p);
+        void setPos(float, float, float);
+
+        void translate(const maths::Vector &v); // effectue une translation de vecteur v
         void translate(float x, float y, float z); // effectue une translation de vecteur (x,y,z)
         void rotateX(float deg); // effectue une rotation sur l'axe X, de deg radians
         void rotateY(float deg); // effectue une rotation sur l'axe Y, de deg radians
         void rotateZ(float deg); // effectue une rotation sur l'axe Z, de deg radians
         void scale(float factor); // effectue un redimensionnement de facteur factor
+
+        void fromYaml(const YAML::Node &node);
 
     protected:
         maths::Point pos;

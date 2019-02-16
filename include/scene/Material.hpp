@@ -7,13 +7,15 @@ namespace scene {
     class Material {
     public:
         Material();
+        Material(Color ka, Color kd, Color ks);
+        Material(Color ka, Color kd, Color ks, float shininess);
 
         Color getKa() const;
         Color getKd() const;
         Color getKs() const;
         float getShininess() const;
 
-        void setShininess(int);
+        void setShininess(float s);
         void setKa(Color);
         void setKd(Color);
         void setKs(Color);
