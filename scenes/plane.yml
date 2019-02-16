@@ -1,0 +1,76 @@
+name: "test scene 480"
+
+light:
+  position:
+    x: 2.0
+    y: -3.0
+    z: -0.5
+  diffuse:
+    r: 204.0
+    g: 204.0
+    b: 204.0
+  specular:
+    r: 128.0
+    g: 128.0
+    b: 128.0
+
+camera:
+  resolution:
+    width: 480
+    height: 480
+  focal: 2.0
+  position:
+    x: 0.0
+    y: -0.7
+    z: 0.5
+  rotation:
+    x: 20.0
+    y: 0
+    z: 0
+
+objects:
+  sphere1:
+    type: "sphere"
+    position:
+      x: 0.0
+      y: 0.0
+      z: -0.8
+    material:
+      ambiant:
+        r: 25
+        g: 128
+        b: 25
+      diffuse:
+        r: 64
+        g: 64
+        b: 64
+      specular:
+        r: 191
+        g: 191
+        b: 191
+      shininess: 3.0
+  square1:
+    type: "square"
+    position:
+      x: 0.0
+      y: 0.0
+      z: -1.0
+    rotation:
+      x: 80
+      y: 0.0
+      z: 0.0
+    scale: 100
+    material:
+      ambiant:
+        r: 128
+        g: 25
+        b: 25
+      diffuse:
+        r: 64
+        g: 64
+        b: 64
+      specular:
+        r: 191
+        g: 191
+        b: 191
+      shininess: 3.0
