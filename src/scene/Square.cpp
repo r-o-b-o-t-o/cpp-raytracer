@@ -16,7 +16,7 @@ namespace scene {
         impact = rayon.getOrigin() + t*rayon.getVector();
         if ((impact[0] < -1 || impact[0] > 1) || (impact[1] < -1 || impact[1] > 1))
             return false;
-        impact = this->localToGlobal(impact);
+        impact = this->localToGlobal(impact)+ this->getNormal(impact, ray.getOrigin()).getVector() * 0.0005f; 
         
         return true;
     }

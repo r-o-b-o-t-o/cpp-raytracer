@@ -19,6 +19,7 @@ namespace scene {
 
     void Entity::setPos(float x, float y, float z) {
         this->setPos(maths::Point(x, y, z));
+        this->translate(maths::Vector(x, y, z));
     }
 
     const maths::Point &Entity::getPos() const {

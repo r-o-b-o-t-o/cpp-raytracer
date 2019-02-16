@@ -2,9 +2,9 @@ name: "plane"
 
 light:
   position:
-    x: 3.0
+    x: 1.0
     y: -3.0
-    z: -0.8
+    z: -0.5
   diffuse:
     r: 204.0
     g: 204.0
@@ -15,17 +15,17 @@ light:
     b: 128.0
 
 camera:
-  shadow: false
+  shadow: true
   resolution:
     width: 480
     height: 480
   focal: 2.0
   position:
     x: 0.0
-    y: -0.7
+    y: -1.
     z: 0.5
   rotation:
-    x: 20.0
+    x: 30.0
     y: 0
     z: 0
 
@@ -34,7 +34,7 @@ objects:
     type: "sphere"
     position:
       x: 0.0
-      y: -0.2
+      y: -0.6
       z: -0.8
     material:
       ambiant:
@@ -57,7 +57,7 @@ objects:
       y: 0.0
       z: -1.0
     rotation:
-      x: 80
+      x: 90
       y: 0.0
       z: 0.0
     material:

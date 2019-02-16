@@ -34,7 +34,8 @@ namespace scene {
 
         }
         impact = r.getOrigin() + rac * r.getVector();
-        impact = this->localToGlobal(impact);
+        impact = this->localToGlobal(impact)+ this->getNormal(impact, r.getOrigin()).getVector();
+        
         return true;
     }
 
