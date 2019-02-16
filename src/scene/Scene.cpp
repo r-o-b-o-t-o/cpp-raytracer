@@ -3,6 +3,7 @@
 #include "scene/Square.hpp"
 #include "scene/Cube.hpp"
 #include "scene/Sphere.hpp"
+#include "maths/Point.hpp"
 
 namespace scene {
     Scene::Scene() : camera(Camera(maths::Point())) {
@@ -50,6 +51,13 @@ namespace scene {
 
     void Scene::insertObj(Object* obj) {
         this->objs.push_back(obj);
+    }
+
+    bool Scene::isShadow(const maths::Point& impact, const Light& light){
+        for (auto& obj : this->objs)
+        {
+
+        }
     }
 
     cv::Mat Scene::render(int height, int width) const {
