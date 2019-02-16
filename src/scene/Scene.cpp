@@ -70,14 +70,22 @@ namespace scene {
 
                 maths::Ray ray = this->camera.getRay(x, y);
                 maths::Point impact;
+                float minDist = -1.0f;
+                float impactDist;
+                scene::Object *closest = nullptr;
                 for (auto &obj : this->objs) {
                     if (obj->intersect(ray, impact)) {
-                        Color c = this->camera.getImpactColor(ray, *obj, impact, *this);
-                        bgra[0] = cv::saturate_cast<uchar>(c.b() * 255.0f);
-                        bgra[1] = cv::saturate_cast<uchar>(c.g() * 255.0f);
-                        bgra[2] = cv::saturate_cast<uchar>(c.r() * 255.0f);
-                        break;
+                        impactDist = (maths::Vector(impact) - maths::Vector(this->camera.getPos())).norm();
+                        if (minDist < 0.0f || impactDist < minDist) {
+                            closest = obj;
+                        }
                     }
+                }
+                if (closest != nullptr) {
+                    Color c = this->camera.getImpactColor(ray, *closest, impact, *this);
+                    bgra[0] = cv::saturate_cast<uchar>(c.b() * 255.0f);
+                    bgra[1] = cv::saturate_cast<uchar>(c.g() * 255.0f);
+                    bgra[2] = cv::saturate_cast<uchar>(c.r() * 255.0f);
                 }
             }
         }
