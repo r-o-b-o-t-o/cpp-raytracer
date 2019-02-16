@@ -25,14 +25,14 @@ camera:
     z: 0.5
 
 objects:
-  sphere:
-    name: "Blue sphere"
+  sphere1:
+    type: "sphere"
     position:
       x: 0.0
       y: 0.0
       z: -0.8
-  square:
-    name: "Blue square"
+  square1:
+    type: "square"
     position:
       x: 0.0
       y: 0.0
@@ -41,4 +41,3 @@ objects:
       x: 0.785398
       y: 0.0
       z: 0.0
-    scale: 2

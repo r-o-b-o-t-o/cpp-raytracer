@@ -10,8 +10,7 @@ void useScene(const std::string &scene) {
     std::cout << "Using scene: " << sceneName << std::endl;
 
     scene::Scene sceneObj(config);
-
-    sceneObj.exportImage();
+    sceneObj.exportImage(sceneName);
 }
 
 int main(int argv, char** argc) {

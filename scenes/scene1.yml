@@ -3,8 +3,8 @@ name: "First scene 480"
 light:
   position:
     x: 0.0
-    y: 1.0
-    z: -0.5
+    y: 0.0
+    z: -1.25
   diffuse:
     r: 204.0
     g: 204.0
@@ -15,30 +15,75 @@ light:
     b: 128.0
 
 camera:
+  focal: 2.0
   resolution:
     width: 480
     height: 480
-  focal: 2.0
   position:
     x: 0.0
     y: -0.75
     z: 0.5
 
 objects:
-  sphere:
-    name: "Blue sphere"
+  red:
+    type: "sphere"
+    position:
+      x: -0.5
+      y: -0.4
+      z: -1.25
+    material:
+      ambiant:
+        r: 128
+        g: 25
+        b: 25
+      diffuse:
+        r: 64
+        g: 64
+        b: 64
+      specular:
+        r: 191
+        g: 191
+        b: 191
+      shininess: 3.0
+
+  green:
+    type: "sphere"
+    position:
+      x: 0.5
+      y: -0.4
+      z: -1.25
+    material:
+      ambiant:
+        r: 25
+        g: 128
+        b: 25
+      diffuse:
+        r: 64
+        g: 64
+        b: 64
+      specular:
+        r: 191
+        g: 191
+        b: 191
+      shininess: 3.0
+
+  blue:
+    type: "sphere"
     position:
       x: 0.0
-      y: 0.0
-      z: -0.8
-  square:
-    name: "Blue square"
-    position:
-      x: 0.0
-      y: 0.0
-      z: -1.0
-    rotation:
-      x: 0.785398
-      y: 0.0
-      z: 0.0
-    scale: 2
+      y: 0.4
+      z: -1.25
+    material:
+      ambiant:
+        r: 25
+        g: 25
+        b: 128
+      diffuse:
+        r: 64
+        g: 64
+        b: 64
+      specular:
+        r: 191
+        g: 191
+        b: 191
+      shininess: 3.0

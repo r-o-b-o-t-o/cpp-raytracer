@@ -54,4 +54,24 @@ namespace maths {
     };
 }
 
+#include <yaml-cpp/yaml.h>
+namespace YAML {
+    template<>
+    class convert<maths::Vector> {
+    public:
+        static bool decode(const Node &node, maths::Vector &rhs) {
+            auto x = node["x"], y = node["y"], z = node["z"];
+
+            if (!x || !y || !z) {
+                return false;
+            }
+
+            rhs.x(x.as<float>());
+            rhs.y(y.as<float>());
+            rhs.z(z.as<float>());
+            return true;
+        }
+    };
+}
+
 #endif // VECTOR_HPP

@@ -26,9 +26,8 @@ namespace scene {
 
         const Camera &getCamera() const;
         void setCamera(const Camera &camera);
-
-        void exportImage();
-
+        
+        void exportImage(const std::string &name);
     protected:
         Camera camera;
         std::vector<Object*> objs;

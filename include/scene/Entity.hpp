@@ -11,7 +11,7 @@ namespace scene {
     class Entity {
     public:
         Entity();
-        explicit Entity(maths::Point);
+        explicit Entity(const maths::Point &p);
         virtual ~Entity() = 0;
 
         const maths::Point &getPos() const;
@@ -20,12 +20,15 @@ namespace scene {
 
         void translate(const maths::Vector &v); // effectue une translation de vecteur v
         void translate(float x, float y, float z); // effectue une translation de vecteur (x,y,z)
+        void rotate(const maths::Vector &v);
         void rotateX(float deg); // effectue une rotation sur l'axe X, de deg radians
         void rotateY(float deg); // effectue une rotation sur l'axe Y, de deg radians
         void rotateZ(float deg); // effectue une rotation sur l'axe Z, de deg radians
+        void scale(const maths::Vector &v);
+        void scale(float x, float y, float z); // effectue un redimensionnement de facteurs (x,y,z)
         void scale(float factor); // effectue un redimensionnement de facteur factor
 
-        void fromYaml(const YAML::Node &node);
+        virtual void fromYaml(const YAML::Node &node);
 
     protected:
         maths::Point pos;
