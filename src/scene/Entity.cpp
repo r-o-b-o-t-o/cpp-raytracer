@@ -93,7 +93,7 @@ namespace scene {
 
     // effectue un redimensionnement de facteurs (x,y,z)
     void Entity::scale(float x, float y, float z) {
-        maths::Matrix mat = maths::Matrix(3, 3);
+        maths::Matrix mat;
 
         mat(0, 0) = x;
         mat(1, 1) = y;
@@ -105,7 +105,7 @@ namespace scene {
 
     // effectue un redimensionnement de facteur factor
     void Entity::scale(float factor) {
-        maths::Matrix mat = maths::Matrix(3, 3);
+        maths::Matrix mat;
 
         mat(0, 0) = factor;
         mat(1, 1) = factor;
@@ -130,6 +130,7 @@ namespace scene {
 
         if (rot) {
             auto v = rot.as<maths::Vector>();
+            v *= M_PI / 180.0f;
             this->rotate(v);
         }
 

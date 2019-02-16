@@ -1,4 +1,4 @@
-name: "First scene 480"
+name: "Red Green Blue Spheres"
 
 light:
   position:
@@ -17,7 +17,7 @@ light:
 camera:
   focal: 2.0
   resolution:
-    width: 480
+    width: 640
     height: 480
   position:
     x: 0.0
