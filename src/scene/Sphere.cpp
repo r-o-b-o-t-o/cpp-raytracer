@@ -55,7 +55,7 @@ namespace scene {
         auto phi = acosf(p.z());
         auto theta = atan2f(p.y(), p.x());
 
-        p.x((-theta + (float)M_PI) / (2.0f * (float)M_PI));
+        p.x((-theta / (2.0f * (float)M_PI)) + 0.5f);
         p.y(phi / (float)M_PI);
 
         return p;

@@ -58,6 +58,13 @@ endif ()
 
 add_executable(Raytracing ${EXECUTABLE_WIN32} ${source_files})
 
+# Set scenes directory
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+    target_compile_definitions(Raytracing PRIVATE SCENES_DIR="./scenes/")
+else ()
+    target_compile_definitions(Raytracing PRIVATE SCENES_DIR="../scenes/")
+endif ()
+
 include_directories("include")
 include_directories("include/imgui")
 include_directories("tinyfiledialogs")

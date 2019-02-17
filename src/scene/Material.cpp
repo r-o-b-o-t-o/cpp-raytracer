@@ -5,7 +5,8 @@ namespace scene {
             : ka(scene::Color()),
               kd(scene::Color()),
               ks(scene::Color()),
-              shininess(3.0f) {
+              shininess(3.0f),
+              texture(0, 0, 0) {
 
     }
 
@@ -13,7 +14,8 @@ namespace scene {
             : ka(ka),
               kd(kd),
               ks(ks),
-              shininess(3.0f) {
+              shininess(3.0f),
+              texture(0, 0, 0) {
 
     }
 
@@ -51,5 +53,13 @@ namespace scene {
 
     void Material::setKs(scene::Color col) {
         this->ks = col;
+    }
+
+    const cv::Mat &Material::getTexture() const {
+        return texture;
+    }
+
+    void Material::setTexture(const cv::Mat &texture) {
+        Material::texture = texture;
     }
 }

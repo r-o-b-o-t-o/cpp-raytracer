@@ -22,12 +22,23 @@ scene::Scene* parseSceneFromFile(const std::string &path) {
 }
 
 void getScenesList(std::vector<scene::Scene*> &scenes) {
-    std::string path = "../scenes/";
+    std::string path = SCENES_DIR;
+    if (!boost::filesystem::exists(path)) {
+        if (!boost::filesystem::create_directory(path)) {
+            return;
+        }
+    }
     for (auto &scene : scenes) {
         delete scene;
     }
     scenes.clear();
     for (auto &entry : boost::filesystem::directory_iterator(path)) {
+        auto ext = entry.path().extension().string();
+        std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+        if (!(ext == ".yaml" || ext == ".yml")) {
+            continue;
+        }
+
         auto scene = parseSceneFromFile(entry.path().string());
         if (scene != nullptr) {
             scene->path = boost::filesystem::canonical(entry.path()).generic_string();
@@ -80,7 +91,7 @@ void importYaml(std::vector<scene::Scene*> &scenes) {
     auto imported = importYamlDialog(p);
     if (imported != nullptr) {
         boost::filesystem::path path(p);
-        std::string dest = "../scenes/";
+        std::string dest = SCENES_DIR;
         dest.append(path.filename().string());
         if (boost::filesystem::equivalent(path, dest)) {
             return;

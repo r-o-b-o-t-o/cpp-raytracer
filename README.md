@@ -154,6 +154,29 @@ objects:
         shininess: 3.0
 ```
 
+Les matériaux peuvent utiliser des textures, il suffit de spécifier le chemin vers la texture dans un attribut `texture`:
+
+```yaml
+  ...
+    material:
+      ambiant:
+        r: 128
+        g: 128
+        b: 128
+      diffuse:
+        r: 64
+        g: 64
+        b: 64
+      specular:
+        r: 191
+        g: 191
+        b: 191
+      shininess: 3.0
+      texture: "textures/monimage.png"
+```
+
+(Attention, **les chemins relatifs vers les textures sont relatifs par rapport au dossier `scenes`**. Par exemple, ici, le fichier sera cherché dans `scenes/textures/monimage.png`)
+
 Des exemple de scènes sont disponibles dans le dossier `scenes`.
 
 ## Explication algo
