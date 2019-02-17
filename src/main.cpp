@@ -68,6 +68,12 @@ int main(int argv, char** argc) {
     std::string renderTime;
     bool renderWindowOpened = false;
     scene::Scene* renderedScene = nullptr;
+    auto refreshTexture = [&]() {
+        cv::Mat matRgb;
+        cv::cvtColor(*mat, matRgb, cv::COLOR_BGRA2RGBA);
+        image.create(static_cast<unsigned int>(matRgb.cols), static_cast<unsigned int>(matRgb.rows), matRgb.ptr());
+        texture.loadFromImage(image);
+    };
 
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Raytracing", sf::Style::Default);
     window.setVerticalSyncEnabled(true);
@@ -153,10 +159,10 @@ int main(int argv, char** argc) {
         //////// Render Window
         if (renderWindowOpened && renderedScene != nullptr) {
             ImGui::Begin("Render", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-            image.create(static_cast<unsigned int>(mat->cols), static_cast<unsigned int>(mat->rows), mat->ptr());
-            if (texture.loadFromImage(image)) {
-                ImGui::Image(texture);
+            if (!renderThreadDone) {
+                refreshTexture();
             }
+            ImGui::Image(texture);
             if (renderThreadDone) {
                 ImGui::Text("%s", renderTime.c_str());
                 if (ImGui::Button("Export as PNG")) {
@@ -172,6 +178,7 @@ int main(int argv, char** argc) {
         window.display();
 
         if (renderThreadDone && renderThread.joinable()) {
+            refreshTexture();
             renderThread.join();
             renderTime = renderTimeFuture.get();
             renderTimePromise = std::promise<std::string>();
