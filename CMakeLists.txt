@@ -28,6 +28,7 @@ set(source_files
         src/scene/Sphere.cpp
         src/scene/Plane.cpp
         src/scene/Square.cpp
+        src/scene/Triangle.cpp
         src/scene/Cube.cpp
         src/scene/Camera.cpp
         src/scene/Light.cpp
