@@ -1,0 +1,75 @@
+name: "Multiple Point Lights"
+
+lights:
+  red:
+    position:
+      x: -0.8
+      y: -1.0
+      z: -1.25
+    diffuse:
+      r: 255.0
+      g: 20.0
+      b: 20.0
+    specular:
+      r: 255.0
+      g: 20.0
+      b: 20.0
+  green:
+    position:
+      x: 0.8
+      y: -1.0
+      z: -1.25
+    diffuse:
+      r: 20.0
+      g: 255.0
+      b: 20.0
+    specular:
+      r: 20.0
+      g: 255.0
+      b: 20.0
+  blue:
+    position:
+      x: 0.0
+      y: 0.5
+      z: -1.75
+    diffuse:
+      r: 20.0
+      g: 20.0
+      b: 255.0
+    specular:
+      r: 20.0
+      g: 20.0
+      b: 255.0
+
+camera:
+  focal: 2.0
+  resolution:
+    width: 600
+    height: 600
+  position:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+
+objects:
+  obj:
+    type: "sphere"
+    position:
+      x: 0.0
+      y: 0.0
+      z: -1.25
+    scale: 1.2
+    material:
+      ambiant:
+        r: 25
+        g: 25
+        b: 128
+      diffuse:
+        r: 64
+        g: 64
+        b: 64
+      specular:
+        r: 100
+        g: 100
+        b: 100
+      shininess: 4.0

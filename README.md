@@ -1,29 +1,29 @@
 # Raytracer
 
-Le programme utlise des scènes au format yaml pour créer une image représentant la scène. Les scènes sont à placer dans le dossier `scenes`.
+Le programme utlise des scènes au format YAML pour créer une image représentant la scène. Les scènes sont à placer dans le dossier `scenes`.
 
-## Scene
+## Scène
 
-Le fichier detaillant la scène est constitué de plusieurs attributs:
+Le fichier détaillant la scène est constitué de plusieurs attributs:
 
-- name -> le nom de la scène qui apparait dans le selecteur de scène et qui sera le nom de l'image generer.
+- name -> le nom de la scène qui apparait dans le sélecteur de scène et qui sera le nom de l'image générée.
 
-- light -> la lumiere utilisée pour éclairer la scène.
+- light / lights -> la/les lumière(s) utilisée(s) pour éclairer la scène.
 
-- camera -> la camera qui enregistre tout ce qu'elle voit dans l'image.
+- camera -> la caméra qui enregistre tout ce qu'elle voit dans la scène.
 
 - objects -> les objets de la scène (plane, square, spheres, cubes, ...)
 
-Chaqu'un de ses attributs possede d'autre attribut mais certains sont communs tel que:
-    
-    - position -> qui possede 3 attributs (x, y et z) qui est donc la position de l'entité. Peut etre definit sur les entité: light, camera, objet. Si elle n'est pas definit, la position de l'entiter sera par defaut x:0.0, y:0.0, z:0.0 .
+Chacun de ces attributs possède d'autres attributs mais certains leurs sont communs, tels que:
 
-    - rotation -> qui possede 3 attributs (x, y et z) qui est donc la rotation de l'entité en degrés. Peut etre definit sur les entité: light, camera, objet. Si elle n'est pas definit, la position de l'entiter sera par defaut x:0.0, y:0.0, z:0.0 .
+    - position -> qui possède 3 attributs (x, y et z) qui est donc la position de l'entité. Peut être definie sur les entités: light, camera, objet. Si elle n'est pas définie, la position de l'entité sera par défaut x:0.0, y:0.0, z:0.0.
+
+    - rotation -> qui possède 3 attributs (x, y et z) qui est donc la rotation de l'entité en degrés. Peut être définie sur les entités: light, camera, objet. Si elle n'est pas definie, la position de l'entité sera par défaut x:0.0, y:0.0, z:0.0.
 
 Sur l'entité light, il est possible d'ajouter certains attributs:
-    
-    - diffuse -> qui possede 3 attributs (r, g et b) qui est la couleurs de la lumiere diffuse. Peut etre definis sur light et tous les attributs material. Si elle n'est pas definit, la lumiere sera blanche -> r = g = b = 255.
-    - speculaire -> qui possede 3 attributs (r, g et b) qui est la couleurs de la lumiere speculaire. Peut etre definis sur light et tous les attributs material. Si elle n'est pas definit, la lumiere sera blanche -> r = g = b = 255
+
+    - diffuse -> qui possède 3 attributs (r, g et b) qui est la couleur de la lumière diffuse. Peut être définie sur light et tous les attributs material. Si elle n'est pas définie, la lumière sera blanche -> r = g = b = 255.
+    - speculaire -> qui possède 3 attributs (r, g et b) qui est la couleur de la lumière spéculaire. Peut être définie sur light et tous les attributs material. Si elle n'est pas définie, la lumière sera blanche -> r = g = b = 255
 
 ```yaml
 light:
@@ -43,13 +43,13 @@ light:
 
 Sur l'entité camera, il est possible d'ajouter certains attributs:
 
-    - shadow -> qui active ou non les ombres sur la scene (true ou false).
-    - resolution -> qui prend 2 attribut (width et height) qui est la taille de l'image.
-    - focal -> qui est la distance focal de la camera.
+    - shadow -> qui active ou non les ombres sur la scène (true ou false).
+    - resolution -> qui prend 2 attributs (width et height) qui est la taille de l'image.
+    - focal -> qui est la distance focale de la camera.
     - position
     - rotation
 
-Exemple:  
+Exemple:
 ```yaml
 camera:  
   shadow: true  
@@ -67,7 +67,7 @@ camera:
     z: 0  
 ```
 
-Sur l'attribut objects, on peut ajouter plusieurs objets dont le nom de l'attribut est a notre choix, example:
+Sur l'attribut objects, on peut ajouter plusieurs objets dont le nom de l'attribut est à notre choix, exemple:
 ```yaml
 objects:  
     premiere_sphere:  
@@ -78,13 +78,13 @@ objects:
         ...  
 ```
 
-Chaqu'un de ses attribut sera considerer comme un objet, ces objets ont plusieurs attribut:
+Chacun de ces attributs sera considéré comme un objet, ces objets ont plusieurs attributs:
 
-    - type -> une string definissant le type de d'objet ("sphere", "cube", "plane", "square", ...).
+    - type -> une string définissant le type de l'objet ("sphere", "cube", "plane", "square", ...).
     - position
     - rotation
-    - material -> qui prend l'attribut ambiant (qui est la couleurs par defaut d'un objet en r, g et b), l'attribut diffuse, l'attribut specular et l'attibut shininess (qui represente la brillance)
-    - scale -> qui modifie la taille de l'objet
+    - material -> qui prend l'attribut ambiant (qui est la couleur par défaut d'un objet en r, g et b), l'attribut diffuse, l'attribut specular et l'attibut shininess (qui représente la brillance)
+    - scale -> qui modifie la taille de l'objet: peut être un réel ou un vecteur (x, y, z)
 
 ```yaml
 objects:
@@ -110,7 +110,7 @@ objects:
       shininess: 3.0
 ```
 
-L'attribut materials vient sous deux forme: material et materials. materials permet de specifier deux materiaux a utiliser pour l'objet. Il faut specifier l'attribut type ("checkerboard" ou "stripes" pour damier ou lignes) et ajouter un "-" pour definir les deux materiaux.
+L'attribut materials vient sous deux forme: `material` et `materials`. `materials` permet de specifier deux matériaux à utiliser pour l'objet. Il faut specifier l'attribut type ("checkerboard" ou "stripes" pour damier ou lignes) et ajouter un "-" pour definir les deux matériaux.
 
 ```yaml
 objects:
@@ -159,15 +159,15 @@ Des exemple de scènes sont disponibles dans le dossier `scenes`.
 ## Explication algo
 
 Illumination : Phong
-Matrice : elimination de Gauss Jordan pour l'inversion
+Matrice : élimination de Gauss-Jordan pour l'inversion
 
 ## Explication programme
 
-Creation de l'image dans la fonction render() de la classe Scene, utilise getImpactColor() de la classe Camera.
-main : setup la GUI, et appel la fonction render pour une scene donner.
-Les classes mathematique (Point, Vector, Matrice, Ray) sont dans le dossier maths (.cpp -> `src/maths`, .hpp -> `include/maths`) et les classes concernant la scène (Entity, Object, Camera, Color, Material, ...) sont dans le dossier scene (.cpp -> `src/scene`, .hpp -> `include/scene`).
+Création de l'image dans la fonction `render()` de la classe `Scene`, utilise `getImpactColor()` de la classe `Camera`.
+main : setup la GUI, et appel à la fonction `render()` pour une scène donnée.
+Les classes mathématiques (`Point`, `Vector`, `Matrice`, `Ray`) sont dans le dossier `maths` (.cpp -> `src/maths`, .hpp -> `include/maths`) et les classes concernant la scène (`Entity`, `Object`, `Camera`, `Color`, `Material`, ...) sont dans le dossier scene (.cpp -> `src/scene`, .hpp -> `include/scene`).
 
-## Repartition des taches
+## Répartition des tâches
 
-Axel COCAT (Roboto) -> Classes maths (Ray, Point, Vector, Matrice, ...), GUI, multithread.
-Yohann  JERRAIN (Kryod) -> Classes scene (entite, scene, objets, square, plane, sphere, camera, light, ...), Ombres, parsing scene/yaml, Readme.
+Axel COCAT ([robot0](https://github.com/robot0)) -> Classes maths (`Ray`, `Point`, `Vector`, `Matrice`, ...), GUI, multithread.
+Yohann JERRAIN ([Kryod](https://github.com/Kryod)) -> Classes scène (`Entity`, `Scene`, `Object`, `Square`, `Plane`, `Sphere`, `Camera`, `Light`, ...), ombres, parsing scene/yaml, readme.

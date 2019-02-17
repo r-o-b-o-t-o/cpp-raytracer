@@ -17,7 +17,14 @@ namespace scene {
     Scene::Scene(YAML::Node root) {
         this->name = root["name"].as<std::string>();
         this->camera = root["camera"].as<Camera>();
-        this->insertLight(root["light"].as<Light>());
+        if (root["light"]) {
+            this->insertLight(root["light"].as<Light>());
+        } else if (root["lights"]) {
+            auto lights = root["lights"];
+            for (auto it = lights.begin(); it != lights.end(); ++it) {
+                this->insertLight(it->second.as<Light>());
+            }
+        }
 
         YAML::Node objects = root["objects"];
         for (auto it = objects.begin(); it != objects.end(); ++it) {
