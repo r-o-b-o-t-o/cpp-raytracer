@@ -9,6 +9,11 @@ find_package(OpenCV REQUIRED)
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(Threads)
 find_package(SFML 2.5 COMPONENTS graphics window system)
+if (!WIN32)
+    find_package(glfw3 REQUIRED)
+    find_package(OpenGL REQUIRED)
+    find_package(GLEW REQUIRED)
+endif()
 
 set(source_files
         src/main.cpp
@@ -54,13 +59,34 @@ include_directories("include")
 include_directories("include/imgui")
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${YamlCpp_INCLUDE_DIRS})
+if (!WIN32)
+    include_directories(${GLFW_INCLUDE_DIRS})
+    include_directories(${OPENGL_INCLUDE_DIRS})
+    include_directories(${GLEW_INCLUDE_DIRS})
+    link_libraries(${GLFW_LIBRARY_DIRS})
+endif()
 target_link_libraries(Raytracing ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(Raytracing ${OpenCV_LIBS})
 target_link_libraries(Raytracing ${YamlCpp_LIBS})
 target_link_libraries(Raytracing ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 target_link_libraries(Raytracing sfml-graphics sfml-window sfml-system)
+
+if (APPLE)
+    find_library(COCOA_LIBRARY Cocoa)
+    find_library(OpenGL_LIBRARY OpenGL)
+    find_library(IOKIT_LIBRARY IOKit)
+    find_library(COREVIDEO_LIBRARY CoreVideo)
+    SET(EXTRA_LIBS ${COCOA_LIBRARY} ${OpenGL_LIBRARY} ${IOKIT_LIBRARY} ${COREVIDEO_LIBRARY})
+endif (APPLE)
+
 if (WIN32)
     target_link_libraries(Raytracing opengl32)
 else ()
-    target_link_libraries(Raytracing gl)
+    target_link_libraries(
+        Raytracing
+        glfw
+        ${OPENGL_LIBRARIES}
+        ${GLEW_LIBRARIES}
+        ${EXTRA_LIBS}
+    )
 endif ()
