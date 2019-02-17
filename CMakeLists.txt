@@ -41,6 +41,8 @@ set(source_files
         src/imgui/imgui_widgets.cpp
         src/imgui/imgui_demo.cpp
         src/imgui/imgui-SFML.cpp
+
+        tinyfiledialogs/tinyfiledialogs.c
 )
 
 if (NOT YamlCpp_LIBS)
@@ -57,6 +59,7 @@ add_executable(Raytracing ${EXECUTABLE_WIN32} ${source_files})
 
 include_directories("include")
 include_directories("include/imgui")
+include_directories("tinyfiledialogs")
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${YamlCpp_INCLUDE_DIRS})
 if (!WIN32)
@@ -81,12 +84,7 @@ endif (APPLE)
 
 if (WIN32)
     target_link_libraries(Raytracing opengl32)
+    target_link_libraries(Raytracing comdlg32 ole32)
 else ()
-    target_link_libraries(
-        Raytracing
-        glfw
-        ${OPENGL_LIBRARIES}
-        ${GLEW_LIBRARIES}
-        ${EXTRA_LIBS}
-    )
+    target_link_libraries(Raytracing glfw ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${EXTRA_LIBS})
 endif ()

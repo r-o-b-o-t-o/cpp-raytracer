@@ -1,2 +1,3 @@
 include/imgui/* linguist-vendored
 src/imgui/* linguist-vendored
+tinyfiledialogs/* linguist-vendored

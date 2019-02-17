@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include <SFML/Graphics.hpp>
+#include "tinyfiledialogs.h"
 
 #include "scene/Scene.hpp"
 
@@ -20,14 +21,32 @@ void getScenesList(std::vector<scene::Scene*> &scenes) {
     }
 }
 
-void exportPng(const scene::Scene &scene, cv::Mat* mat) {
-    std::vector<int> compressionParams;
-    compressionParams.push_back(CV_IMWRITE_PNG_COMPRESSION);
-    compressionParams.push_back(9);
+inline bool ends_with(std::string const &value, std::string const &ending) {
+    if (ending.size() > value.size()) return false;
+    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
 
+void exportPng(const scene::Scene &scene, cv::Mat* mat) {
     std::string imgName = scene.getName();
     imgName.append(".png");
-    cv::imwrite(imgName.c_str(), *mat, compressionParams);
+
+    char const* filterPatterns[1] = { "*.png" };
+    char const* fileName = tinyfd_saveFileDialog("Save image as...", imgName.c_str(), 1, filterPatterns, nullptr);
+
+    if (fileName) {
+        std::vector<int> compressionParams;
+        compressionParams.push_back(CV_IMWRITE_PNG_COMPRESSION);
+        compressionParams.push_back(9);
+
+        auto lower = std::string(fileName);
+        std::string path = std::string(fileName);
+        std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+        if (!ends_with(lower, ".png")) {
+            path.append(".png");
+        };
+
+        cv::imwrite(path, *mat, compressionParams);
+    }
 }
 
 int main(int argv, char** argc) {
@@ -48,6 +67,7 @@ int main(int argv, char** argc) {
     std::future<std::string> renderTimeFuture;
     std::string renderTime;
     bool renderWindowOpened = false;
+    scene::Scene* renderedScene = nullptr;
 
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Raytracing", sf::Style::Default);
     window.setVerticalSyncEnabled(true);
@@ -84,13 +104,13 @@ int main(int argv, char** argc) {
         if (ImGui::Button("Refresh")) {
             selectedSceneIdx = -1;
             selectedScene = nullptr;
+            renderedScene = nullptr;
             getScenesList(scenes);
         }
         ImGui::EndChild(); // End Left pane
         ImGui::SameLine();
 
         ImGui::BeginGroup(); // Right pane
-        static scene::Scene* renderedScene = nullptr;
         if (selectedScene != nullptr) {
             ImGui::BeginChild("Container", ImVec2(0.0f, 0.0f), true);
             ImGui::BeginChild("Item view", ImVec2(0.0f, -ImGui::GetItemsLineHeightWithSpacing()));
@@ -131,7 +151,7 @@ int main(int argv, char** argc) {
 
 
         //////// Render Window
-        if (renderWindowOpened) {
+        if (renderWindowOpened && renderedScene != nullptr) {
             ImGui::Begin("Render", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
             image.create(static_cast<unsigned int>(mat->cols), static_cast<unsigned int>(mat->rows), mat->ptr());
             if (texture.loadFromImage(image)) {
