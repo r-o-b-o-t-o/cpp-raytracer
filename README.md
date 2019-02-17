@@ -175,3 +175,15 @@ Les classes mathématiques (`Point`, `Vector`, `Matrice`, `Ray`) sont dans le do
 Axel COCAT ([robot0](https://github.com/robot0)) -> Classes maths (`Ray`, `Point`, `Vector`, `Matrice`, ...), GUI, multithread.
 
 Yohann JERRAIN ([Kryod](https://github.com/Kryod)) -> Classes scène (`Entity`, `Scene`, `Object`, `Square`, `Plane`, `Sphere`, `Camera`, `Light`, ...), ombres, parsing scène -> yaml, readme.
+
+## Bibliothèques utilisées
+
+- **[OpenCV](https://github.com/opencv/opencv)**: matrice de pixels, enregistrement au format PNG. _([licence BSD](https://github.com/opencv/opencv/blob/master/LICENSE))_
+
+- **[ImGui](https://github.com/ocornut/imgui)**: interface graphique. _([licence MIT](https://github.com/ocornut/imgui/blob/master/LICENSE.txt))_
+
+- **[SFML](https://github.com/SFML/SFML)**: gestion de la fenêtre et de ses événements. _([licence](https://github.com/SFML/SFML/blob/master/license.md))_
+
+- **[ImGui + SFML](https://github.com/eliasdaler/imgui-sfml)**: bindings pour utiliser ImGui avec SFML. _([licence MIT](https://github.com/eliasdaler/imgui-sfml/blob/master/LICENSE))_
+
+- **[tinyfiledialogs](https://sourceforge.net/projects/tinyfiledialogs/)**: dialogues natifs d'enregistrement ou de choix de fichiers, boîtes de messages. _([licence zlib](https://sourceforge.net/directory/license:zlib/))_
