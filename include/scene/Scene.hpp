@@ -2,6 +2,9 @@
 #define SCENE_HPP
 
 #include <vector>
+#include <thread>
+#include <atomic>
+#include <future>
 #include <yaml-cpp/yaml.h>
 #include <opencv2/opencv.hpp>
 
@@ -27,14 +30,17 @@ namespace scene {
         const Camera &getCamera() const;
         bool isShadow(const maths::Point& impact, const Light& light) const;
         void setCamera(const Camera &camera);
-        
-        void exportImage(const std::string &name);
+
+        std::thread render(cv::Mat* mat, std::promise<std::string> &&p, std::atomic<bool> &done) const;
+
+        const std::string &getName() const;
+
     protected:
+        std::string name;
         Camera camera;
         std::vector<Object*> objs;
         std::vector<Light> lights;
 
-        cv::Mat render(int height, int width) const;
         Object* nodeToObj(const std::string &type, const YAML::Node &obj);
     };
 }

@@ -2,40 +2,169 @@
 #include <yaml-cpp/yaml.h>
 #include <boost/filesystem.hpp>
 
+#include "imgui.h"
+#include "imgui-SFML.h"
+#include <SFML/Graphics.hpp>
+
 #include "scene/Scene.hpp"
 
-void useScene(const std::string &scene) {
-    YAML::Node config = YAML::LoadFile(scene);
-    std::string sceneName = config["name"].as<std::string>();
-    std::cout << "Using scene: " << sceneName << std::endl;
+void getScenesList(std::vector<scene::Scene*> &scenes) {
+    std::string path = "../scenes/";
+    for (auto &scene : scenes) {
+        delete scene;
+    }
+    scenes.clear();
+    for (auto &entry : boost::filesystem::directory_iterator(path)) {
+        scene::Scene* scene = new scene::Scene(YAML::LoadFile(entry.path().string()));
+        scenes.push_back(scene);
+    }
+}
 
-    scene::Scene sceneObj(config);
-    sceneObj.exportImage(sceneName);
+void exportPng(const scene::Scene &scene, cv::Mat* mat) {
+    std::vector<int> compressionParams;
+    compressionParams.push_back(CV_IMWRITE_PNG_COMPRESSION);
+    compressionParams.push_back(9);
+
+    std::string imgName = scene.getName();
+    imgName.append(".png");
+    cv::imwrite(imgName.c_str(), *mat, compressionParams);
 }
 
 int main(int argv, char** argc) {
-    std::vector<std::string> scenes;
-    std::string path = "../scenes/";
-    for (auto &entry : boost::filesystem::directory_iterator(path)) {
-        scenes.push_back(entry.path().string());
+    std::vector<scene::Scene*> scenes;
+    getScenesList(scenes);
+    auto scenesGetter = [](void* data, int n, const char** out) -> bool {
+        const std::vector<scene::Scene*>* v = (std::vector<scene::Scene*>*)data;
+        *out = v->at(static_cast<unsigned long long int>(n))->getName().c_str();
+        return true;
+    };
+
+    sf::Image image;
+    sf::Texture texture;
+    cv::Mat* mat = nullptr;
+    std::thread renderThread;
+    std::atomic<bool> renderThreadDone {false};
+    std::promise<std::string> renderTimePromise;
+    std::future<std::string> renderTimeFuture;
+    std::string renderTime;
+    bool renderWindowOpened = false;
+
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "Raytracing", sf::Style::Default);
+    window.setVerticalSyncEnabled(true);
+    ImGui::SFML::Init(window);
+
+    sf::Color bgColor(0, 0, 0);
+
+    window.resetGLStates();
+    sf::Clock deltaClock;
+    while (window.isOpen()) {
+        sf::Event event {};
+        while (window.pollEvent(event)) {
+            ImGui::SFML::ProcessEvent(event);
+
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+        }
+
+        ImGui::SFML::Update(window, deltaClock.restart());
+
+        //////// Scenes Manager
+        ImGui::Begin("Scenes Manager");
+        ImGui::BeginChild("Left pane", ImVec2(250, 0), true);
+        ImGui::BeginChild("List container", ImVec2(0, -ImGui::GetItemsLineHeightWithSpacing()));
+        static int selectedSceneIdx = -1;
+        static scene::Scene* selectedScene = nullptr;
+        {
+            if (ImGui::ListBox("", &selectedSceneIdx, scenesGetter, (void*)&scenes, static_cast<int>(scenes.size()), 6)) {
+                selectedScene = scenes[selectedSceneIdx];
+            }
+        }
+        ImGui::EndChild(); // End List container
+        if (ImGui::Button("Refresh")) {
+            selectedSceneIdx = -1;
+            selectedScene = nullptr;
+            getScenesList(scenes);
+        }
+        ImGui::EndChild(); // End Left pane
+        ImGui::SameLine();
+
+        ImGui::BeginGroup(); // Right pane
+        static scene::Scene* renderedScene = nullptr;
+        if (selectedScene != nullptr) {
+            ImGui::BeginChild("Container", ImVec2(0.0f, 0.0f), true);
+            ImGui::BeginChild("Item view", ImVec2(0.0f, -ImGui::GetItemsLineHeightWithSpacing()));
+            ImGui::Text("%s", selectedScene->getName().c_str());
+            ImGui::Separator();
+            ImGui::Text("%d x %d", (int)selectedScene->getCamera().getWidth(), (int)selectedScene->getCamera().getHeight());
+            ImGui::Text("%d lights", (int)selectedScene->getAllLights().size());
+            ImGui::Text("%d objects", (int)selectedScene->getAllObj().size());
+            ImGui::EndChild(); // End Item view
+            if (ImGui::Button("Render") && (renderThreadDone || mat == nullptr)) {
+                delete mat;
+
+                renderedScene = selectedScene;
+                auto w = renderedScene->getCamera().getWidth();
+                auto h = renderedScene->getCamera().getHeight();
+
+                mat = new cv::Mat((int)h, (int)w, CV_8UC4);
+                renderThreadDone.store(false);
+                renderTimeFuture = renderTimePromise.get_future();
+                renderThread = renderedScene->render(mat, std::move(renderTimePromise), renderThreadDone);
+
+                if (!renderWindowOpened) {
+                    ImGui::SetNextWindowPos(ImVec2(window.getSize().x - w - 24.0f, 8.0f), true);
+                    ImGui::SetNextWindowFocus();
+                }
+
+                renderWindowOpened = true;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Edit")) {
+
+            }
+            ImGui::EndChild(); // End Container
+        }
+        ImGui::EndGroup(); // End Right pane
+        ImGui::End(); // End Scenes Manager
+        ////////
+
+
+        //////// Render Window
+        if (renderWindowOpened) {
+            ImGui::Begin("Render", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+            image.create(static_cast<unsigned int>(mat->cols), static_cast<unsigned int>(mat->rows), mat->ptr());
+            if (texture.loadFromImage(image)) {
+                ImGui::Image(texture);
+            }
+            if (renderThreadDone) {
+                ImGui::Text("%s", renderTime.c_str());
+                if (ImGui::Button("Export as PNG")) {
+                    exportPng(*renderedScene, mat);
+                }
+            }
+            ImGui::End(); // End Render
+        }
+        ////////
+
+        window.clear(bgColor);
+        ImGui::SFML::Render(window);
+        window.display();
+
+        if (renderThreadDone && renderThread.joinable()) {
+            renderThread.join();
+            renderTime = renderTimeFuture.get();
+            renderTimePromise = std::promise<std::string>();
+        }
     }
 
-    std::cout << "Choose a scene:\n" << std::endl;
-    int i = 1;
+    ImGui::SFML::Shutdown();
+
     for (auto &scene : scenes) {
-        std::string name = YAML::LoadFile(scene)["name"].as<std::string>();
-        std::cout << i << ") " << name << std::endl;
-        ++i;
+        delete scene;
     }
+    scenes.clear();
+    delete mat;
 
-    int choice;
-    std::cout << std::endl << "Your choice: ";
-    std::cin >> choice;
-
-    if (choice <= 0 || choice > scenes.size()) {
-        std::cout << "Exiting..." << std::endl;
-    } else {
-        useScene(scenes[choice - 1]);
-    }
     return 0;
 }

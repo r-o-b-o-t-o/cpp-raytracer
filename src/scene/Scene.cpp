@@ -7,7 +7,6 @@
 #include "maths/Vector.hpp"
 #include "maths/Ray.hpp"
 
-#include <thread>
 #include <chrono>
 
 namespace scene {
@@ -16,6 +15,7 @@ namespace scene {
     }
 
     Scene::Scene(YAML::Node root) {
+        this->name = root["name"].as<std::string>();
         this->camera = root["camera"].as<Camera>();
         this->insertLight(root["light"].as<Light>());
 
@@ -72,108 +72,84 @@ namespace scene {
         return false;
     }
 
-    cv::Mat Scene::render(int height, int width) const {
-        cv::Mat mat(height, width, CV_8UC4);
+    std::thread Scene::render(cv::Mat* mat, std::promise<std::string> &&p, std::atomic<bool> &done) const {
+        auto handle = std::thread([mat, this, &p, &done]() {
+            unsigned int numThreads = 8;
+            std::thread threads[numThreads];
+            auto startTime = std::chrono::high_resolution_clock::now();
 
-        unsigned int numThreads = 8;
-        std::thread threads[numThreads];
-        auto startTime = std::chrono::high_resolution_clock::now();
+            for (int threadIdx = 0; threadIdx < numThreads; ++threadIdx) {
+                threads[threadIdx] = std::thread([ numThreads, mat, this ](int idx) {
+                    for (int i = 0; i < mat->rows; ++i) {
+                        if (i % numThreads != idx) {
+                            continue;
+                        }
 
-        for (int threadIdx = 0; threadIdx < numThreads; ++threadIdx) {
-            threads[threadIdx] = std::thread([numThreads, &mat, this](int idx) mutable {
-                for (int i = 0; i < mat.rows; ++i) {
-                    if (i % numThreads != idx) {
-                        continue;
-                    }
+                        for (int j = 0; j < mat->cols; ++j) {
+                            auto &bgra = mat->at<cv::Vec4b>(i, j);
+                            bgra[0] = static_cast<uchar>(0.0f);
+                            bgra[1] = static_cast<uchar>(0.0f);
+                            bgra[2] = static_cast<uchar>(0.0f);
+                            bgra[3] = static_cast<uchar>(255.0f);
 
-                    for (int j = 0; j < mat.cols; ++j) {
-                        auto &bgra = mat.at<cv::Vec4b>(i, j);
-                        bgra[0] = static_cast<uchar>(0.0f);
-                        bgra[1] = static_cast<uchar>(0.0f);
-                        bgra[2] = static_cast<uchar>(0.0f);
-                        bgra[3] = static_cast<uchar>(255.0f);
+                            // x val [0, 1]
+                            float x = (float)j / (float)mat->cols;
+                            // y val [0, 1]
+                            float y = (float)i / (float)mat->rows;
 
-                        // x val [0, 1]
-                        float x = (float)j / (float)mat.cols;
-                        // y val [0, 1]
-                        float y = (float)i / (float)mat.rows;
-
-                        maths::Ray ray = this->camera.getRay(x, y);
-                        maths::Point impact;
-                        maths::Point closestImpact;
-                        float minDist = -1.0f;
-                        float impactDist;
-                        scene::Object *closest = nullptr;
-                        for (auto &obj : this->objs) {
-                            if (obj->intersect(ray, impact)) {
-                                impactDist = maths::Vector(impact - this->camera.getPos()).norm();
-                                if (minDist < 0.0f || impactDist < minDist) {
-                                    closest = obj;
-                                    minDist = impactDist;
-                                    closestImpact = impact;
+                            maths::Ray ray = this->camera.getRay(x, y);
+                            maths::Point impact;
+                            maths::Point closestImpact;
+                            float minDist = -1.0f;
+                            float impactDist;
+                            scene::Object* closest = nullptr;
+                            for (auto &obj : this->objs) {
+                                if (obj->intersect(ray, impact)) {
+                                    impactDist = maths::Vector(impact - this->camera.getPos()).norm();
+                                    if (minDist < 0.0f || impactDist < minDist) {
+                                        closest = obj;
+                                        minDist = impactDist;
+                                        closestImpact = impact;
+                                    }
                                 }
                             }
-                        }
-                        if (closest != nullptr) {
-                            Color c = this->camera.getImpactColor(ray, *closest, closestImpact, *this);
-                            bgra[0] = cv::saturate_cast<uchar>(c.b() * 255.0f);
-                            bgra[1] = cv::saturate_cast<uchar>(c.g() * 255.0f);
-                            bgra[2] = cv::saturate_cast<uchar>(c.r() * 255.0f);
+                            if (closest != nullptr) {
+                                Color c = this->camera.getImpactColor(ray, *closest, closestImpact, *this);
+                                bgra[0] = cv::saturate_cast<uchar>(c.b() * 255.0f);
+                                bgra[1] = cv::saturate_cast<uchar>(c.g() * 255.0f);
+                                bgra[2] = cv::saturate_cast<uchar>(c.r() * 255.0f);
+                            }
                         }
                     }
-                }
-            }, threadIdx);
-        }
-
-        for (auto &thread : threads) {
-            thread.join();
-        }
-
-        auto endTime = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
-        std::cout << "Execution time: ";
-        if (duration >= 1000.0f) {
-            float seconds = duration / 1000.0f;
-            if (seconds >= 60.0f) {
-                float minutes = (int)(seconds / 60.0f);
-                seconds -= minutes * 60.0f;
-                std::cout << minutes << ":" << (int)seconds << ".";
-            } else {
-                std::cout << seconds << " seconds.";
+                }, threadIdx);
             }
-        } else {
-            std::cout << duration << " milliseconds.";
-        }
-        std::cout << std::endl;
 
-        return mat;
-    }
+            for (auto &thread : threads) {
+                thread.join();
+            }
 
-    void Scene::exportImage(const std::string &name) {
-        std::string imgName(name);
-        imgName.append(".png");
-        std::cout << "Exporting image to \"" << imgName << "\"..." << std::endl;
+            auto endTime = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+            std::stringstream ss;
+            ss << "Execution time: ";
+            if (duration >= 1000.0f) {
+                float seconds = duration / 1000.0f;
+                if (seconds >= 60.0f) {
+                    float minutes = (int)(seconds / 60.0f);
+                    seconds -= minutes * 60.0f;
+                    ss << minutes << ":" << (int)seconds << ".";
+                } else {
+                    ss << seconds << " seconds.";
+                }
+            } else {
+                ss << duration << " milliseconds.";
+            }
+            p.set_value(ss.str());
 
-        int height = static_cast<int>(this->camera.getHeight());
-        int width = static_cast<int>(this->camera.getWidth());
+            done.store(true);
+        });
 
-        auto mat = this->render(height, width);
-
-        std::vector<int> compressionParams;
-        compressionParams.push_back(CV_IMWRITE_PNG_COMPRESSION);
-        compressionParams.push_back(9);
-
-        try {
-            imwrite(imgName, mat, compressionParams);
-#ifdef _WIN32
-            imgName = "\"" + imgName + "\"";
-            system(imgName.c_str());
-#endif
-        } catch (std::runtime_error &ex) {
-            std::cerr << "Exception converting image to PNG format: " << ex.what() << std::endl;
-            return;
-        }
-        std::cout << "Saved PNG file." << std::endl;
+        return handle;
     }
 
     Object* Scene::nodeToObj(const std::string &type, const YAML::Node &node) {
@@ -196,5 +172,9 @@ namespace scene {
 
     void Scene::setCamera(const Camera &camera) {
         Scene::camera = camera;
+    }
+
+    const std::string &Scene::getName() const {
+        return this->name;
     }
 }

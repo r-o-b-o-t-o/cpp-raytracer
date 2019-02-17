@@ -3,9 +3,12 @@ project(Raytracing)
 
 set(CMAKE_CXX_STANDARD 14)
 
+include(CMakeLists.local.txt OPTIONAL)
+
 find_package(OpenCV REQUIRED)
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(Threads)
+find_package(SFML 2.5 COMPONENTS graphics window system)
 
 set(source_files
         src/main.cpp
@@ -27,6 +30,12 @@ set(source_files
         src/scene/Scene.cpp
         src/scene/Material.cpp
         src/scene/MaterialProvider.cpp
+
+        src/imgui/imgui.cpp
+        src/imgui/imgui_draw.cpp
+        src/imgui/imgui_widgets.cpp
+        src/imgui/imgui_demo.cpp
+        src/imgui/imgui-SFML.cpp
 )
 
 if (NOT YamlCpp_LIBS)
@@ -39,12 +48,19 @@ if (WIN32 AND "${CMAKE_BUILD_TYPE}" STREQUAL "Release")
     set(EXECUTABLE_WIN32 "WIN32")
 endif ()
 
+add_executable(Raytracing ${EXECUTABLE_WIN32} ${source_files})
+
 include_directories("include")
-include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories("include/imgui")
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${YamlCpp_INCLUDE_DIRS})
-add_executable(Raytracing ${EXECUTABLE_WIN32} ${source_files})
 target_link_libraries(Raytracing ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(Raytracing ${OpenCV_LIBS})
 target_link_libraries(Raytracing ${YamlCpp_LIBS})
 target_link_libraries(Raytracing ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+target_link_libraries(Raytracing sfml-graphics sfml-window sfml-system)
+if (WIN32)
+    target_link_libraries(Raytracing opengl32)
+else ()
+    target_link_libraries(Raytracing gl)
+endif ()
