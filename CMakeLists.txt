@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 find_package(OpenCV REQUIRED)
 find_package(Boost COMPONENTS system filesystem REQUIRED)
+find_package(Threads)
 
 set(source_files
         src/main.cpp
@@ -43,6 +44,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${YamlCpp_INCLUDE_DIRS})
 add_executable(Raytracing ${EXECUTABLE_WIN32} ${source_files})
+target_link_libraries(Raytracing ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(Raytracing ${OpenCV_LIBS})
 target_link_libraries(Raytracing ${YamlCpp_LIBS})
 target_link_libraries(Raytracing ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
