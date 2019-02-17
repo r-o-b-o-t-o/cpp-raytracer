@@ -34,6 +34,7 @@ namespace scene {
         std::thread render(cv::Mat* mat, std::promise<std::string> &&p, std::atomic<bool> &done) const;
 
         const std::string &getName() const;
+        std::string path;
 
     protected:
         std::string name;
