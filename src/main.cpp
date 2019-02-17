@@ -1,4 +1,3 @@
-#include <iostream>
 #include <yaml-cpp/yaml.h>
 #include <boost/filesystem.hpp>
 
@@ -9,6 +8,19 @@
 
 #include "scene/Scene.hpp"
 
+scene::Scene* parseSceneFromFile(const std::string &path) {
+    try {
+        return new scene::Scene(YAML::LoadFile(path));
+    } catch (const std::exception &e) {
+        std::string msg = "An error occurred while parsing \"";
+        msg.append(path);
+        msg.append("\":\r\n");
+        msg.append(e.what());
+        tinyfd_messageBox("Error", msg.c_str(), "ok", "error", 1);
+    }
+    return nullptr;
+}
+
 void getScenesList(std::vector<scene::Scene*> &scenes) {
     std::string path = "../scenes/";
     for (auto &scene : scenes) {
@@ -16,8 +28,10 @@ void getScenesList(std::vector<scene::Scene*> &scenes) {
     }
     scenes.clear();
     for (auto &entry : boost::filesystem::directory_iterator(path)) {
-        scene::Scene* scene = new scene::Scene(YAML::LoadFile(entry.path().string()));
-        scenes.push_back(scene);
+        auto scene = parseSceneFromFile(entry.path().string());
+        if (scene != nullptr) {
+            scenes.push_back(scene);
+        }
     }
 }
 
@@ -97,14 +111,21 @@ int main(int argv, char** argc) {
 
         //////// Scenes Manager
         ImGui::Begin("Scenes Manager");
+        if (ImGui::GetWindowSize().y < 100.0f) {
+            ImGui::SetWindowSize(ImVec2(500.0f, 325.0f), true);
+        }
         ImGui::BeginChild("Left pane", ImVec2(250, 0), true);
         ImGui::BeginChild("List container", ImVec2(0, -ImGui::GetItemsLineHeightWithSpacing()));
         static int selectedSceneIdx = -1;
         static scene::Scene* selectedScene = nullptr;
         {
-            if (ImGui::ListBox("", &selectedSceneIdx, scenesGetter, (void*)&scenes, static_cast<int>(scenes.size()), 6)) {
+            ImGui::Text("Found scenes:");
+            ImGui::PushItemWidth(-1.0f);
+            auto numScenes = static_cast<int>(scenes.size());
+            if (ImGui::ListBox("##ListScenes", &selectedSceneIdx, scenesGetter, (void*)&scenes, numScenes, numScenes)) {
                 selectedScene = scenes[selectedSceneIdx];
             }
+            ImGui::PopItemWidth();
         }
         ImGui::EndChild(); // End List container
         if (ImGui::Button("Refresh")) {
