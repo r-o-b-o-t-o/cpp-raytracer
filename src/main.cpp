@@ -30,6 +30,7 @@ void getScenesList(std::vector<scene::Scene*> &scenes) {
     for (auto &entry : boost::filesystem::directory_iterator(path)) {
         auto scene = parseSceneFromFile(entry.path().string());
         if (scene != nullptr) {
+            scene->path = boost::filesystem::canonical(entry.path()).generic_string();
             scenes.push_back(scene);
         }
     }
@@ -60,6 +61,48 @@ void exportPng(const scene::Scene &scene, cv::Mat* mat) {
         };
 
         cv::imwrite(path, *mat, compressionParams);
+    }
+}
+
+scene::Scene* importYamlDialog(std::string &path) {
+    char const* filterPatterns[2] = { "*.yaml", "*.yml" };
+    char const* fileName = tinyfd_openFileDialog("Load scene from...", "", 2, filterPatterns, nullptr, false);
+
+    if (fileName) {
+        path = fileName;
+        return parseSceneFromFile(path);
+    }
+    return nullptr;
+}
+
+void importYaml(std::vector<scene::Scene*> &scenes) {
+    std::string p;
+    auto imported = importYamlDialog(p);
+    if (imported != nullptr) {
+        boost::filesystem::path path(p);
+        std::string dest = "../scenes/";
+        dest.append(path.filename().string());
+        if (boost::filesystem::equivalent(path, dest)) {
+            return;
+        }
+        if (boost::filesystem::exists(dest)) {
+            int res = tinyfd_messageBox("Overwrite file?", "This file already exists in the scenes directory.\r\nDo you want to replace it?", "yesno", "question", 1);
+            if (res == 0) {
+                return;
+            }
+        }
+        imported->path = boost::filesystem::weakly_canonical(dest).generic_string();
+        boost::filesystem::copy_file(path, dest, boost::filesystem::copy_option::overwrite_if_exists);
+        for (auto it = scenes.begin(); it != scenes.end();) {
+            auto existingScene = *it;
+            if (existingScene->path == imported->path) {
+                it = scenes.erase(it);
+                delete existingScene;
+            } else {
+                ++it;
+            }
+        }
+        scenes.push_back(imported);
     }
 }
 
@@ -108,6 +151,7 @@ int main(int argv, char** argc) {
         }
 
         ImGui::SFML::Update(window, deltaClock.restart());
+        bool isCurrentlyRendering = !(renderThreadDone || mat == nullptr);
 
         //////// Scenes Manager
         ImGui::Begin("Scenes Manager");
@@ -128,11 +172,23 @@ int main(int argv, char** argc) {
             ImGui::PopItemWidth();
         }
         ImGui::EndChild(); // End List container
-        if (ImGui::Button("Refresh")) {
+        if (isCurrentlyRendering) {
+            ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+        }
+        if (ImGui::Button("Refresh") && !isCurrentlyRendering) {
             selectedSceneIdx = -1;
             selectedScene = nullptr;
             renderedScene = nullptr;
             getScenesList(scenes);
+        }
+        if (isCurrentlyRendering) {
+            ImGui::PopStyleVar();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Import Scene")) {
+            selectedSceneIdx = -1;
+            selectedScene = nullptr;
+            importYaml(scenes);
         }
         ImGui::EndChild(); // End Left pane
         ImGui::SameLine();
@@ -143,11 +199,16 @@ int main(int argv, char** argc) {
             ImGui::BeginChild("Item view", ImVec2(0.0f, -ImGui::GetItemsLineHeightWithSpacing()));
             ImGui::Text("%s", selectedScene->getName().c_str());
             ImGui::Separator();
+            ImGui::TextWrapped("Path: %s", selectedScene->path.c_str());
+            ImGui::NewLine();
             ImGui::Text("%d x %d", (int)selectedScene->getCamera().getWidth(), (int)selectedScene->getCamera().getHeight());
             ImGui::Text("%d lights", (int)selectedScene->getAllLights().size());
             ImGui::Text("%d objects", (int)selectedScene->getAllObj().size());
             ImGui::EndChild(); // End Item view
-            if (ImGui::Button("Render") && (renderThreadDone || mat == nullptr)) {
+            if (isCurrentlyRendering) {
+                ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+            }
+            if (ImGui::Button("Render") && !isCurrentlyRendering) {
                 delete mat;
 
                 renderedScene = selectedScene;
@@ -167,8 +228,31 @@ int main(int argv, char** argc) {
                 renderWindowOpened = true;
             }
             ImGui::SameLine();
-            if (ImGui::Button("Edit")) {
-
+            if (ImGui::Button("Reload") && !isCurrentlyRendering) {
+                bool remove = false;
+                if (boost::filesystem::exists(selectedScene->path)) {
+                    auto path = selectedScene->path;
+                    auto newScene = parseSceneFromFile(path);
+                    if (newScene != nullptr) {
+                        newScene->path = path;
+                        scenes[selectedSceneIdx] = newScene;
+                        delete selectedScene;
+                        selectedScene = newScene;
+                    } else {
+                        remove = true;
+                    }
+                } else {
+                    remove = tinyfd_messageBox("Remove dangling scene?", "This file does not exist anymore.\r\nDo you want to remove the scene from the list?", "yesno", "question", 1) != 0;
+                }
+                if (remove) {
+                    scenes.erase(scenes.begin() + selectedSceneIdx);
+                    delete selectedScene;
+                    selectedScene = nullptr;
+                    selectedSceneIdx = -1;
+                }
+            }
+            if (isCurrentlyRendering) {
+                ImGui::PopStyleVar();
             }
             ImGui::EndChild(); // End Container
         }
