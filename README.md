@@ -1,6 +1,6 @@
 # Raytracer
 
-Le programme utlise des scènes au format yaml pour creer une image representant la scène. Les scenes sont a placer dans le dossier scènes.
+Le programme utlise des scènes au format yaml pour créer une image représentant la scène. Les scènes sont à placer dans le dossier `scenes`.
 
 ## Scene
 
@@ -154,4 +154,20 @@ objects:
         shininess: 3.0
 ```
 
-Des exemple de scènes sont disponibles dans le dossier scene.
+Des exemple de scènes sont disponibles dans le dossier `scenes`.
+
+## Explication algo
+
+Illumination : Phong
+Matrice : elimination de Gauss Jordan pour l'inversion
+
+## Explication programme
+
+Creation de l'image dans la fonction render() de la classe Scene, utilise getImpactColor() de la classe Camera.
+main : setup la GUI, et appel la fonction render pour une scene donner.
+Les classes mathematique (Point, Vector, Matrice, Ray) sont dans le dossier maths (.cpp -> `src/maths`, .hpp -> `include/maths`) et les classes concernant la scène (Entity, Object, Camera, Color, Material, ...) sont dans le dossier scene (.cpp -> `src/scene`, .hpp -> `include/scene`).
+
+## Repartition des taches
+
+Axel COCAT (Roboto) -> Classes maths (Ray, Point, Vector, Matrice, ...), GUI, multithread.
+Yohann  JERRAIN (Kryod) -> Classes scene (entite, scene, objets, square, plane, sphere, camera, light, ...), Ombres, parsing scene/yaml, Readme.
