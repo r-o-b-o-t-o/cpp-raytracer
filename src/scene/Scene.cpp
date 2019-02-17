@@ -17,7 +17,7 @@ namespace scene {
         this->insertLight(root["light"].as<Light>());
 
         YAML::Node objects = root["objects"];
-        for (YAML::const_iterator it = objects.begin(); it != objects.end(); ++it) {
+        for (auto it = objects.begin(); it != objects.end(); ++it) {
             std::string name = it->first.as<std::string>();
             std::string type = it->second["type"].as<std::string>();
             this->insertObj(this->nodeToObj(type, it->second));
@@ -87,22 +87,22 @@ namespace scene {
 
                 maths::Ray ray = this->camera.getRay(x, y);
                 maths::Point impact;
-                maths::Point closeImpact;
+                maths::Point closestImpact;
                 float minDist = -1.0f;
                 float impactDist;
                 scene::Object *closest = nullptr;
                 for (auto &obj : this->objs) {
                     if (obj->intersect(ray, impact)) {
-                        impactDist = (maths::Vector(impact) - maths::Vector(this->camera.getPos())).norm();
+                        impactDist = maths::Vector(impact - this->camera.getPos()).norm();
                         if (minDist < 0.0f || impactDist < minDist) {
                             closest = obj;
                             minDist = impactDist;
-                            closeImpact = impact;
+                            closestImpact = impact;
                         }
                     }
                 }
                 if (closest != nullptr) {
-                    Color c = this->camera.getImpactColor(ray, *closest, closeImpact, *this);
+                    Color c = this->camera.getImpactColor(ray, *closest, closestImpact, *this);
                     bgra[0] = cv::saturate_cast<uchar>(c.b() * 255.0f);
                     bgra[1] = cv::saturate_cast<uchar>(c.g() * 255.0f);
                     bgra[2] = cv::saturate_cast<uchar>(c.r() * 255.0f);

@@ -25,6 +25,7 @@ set(source_files
         src/scene/Color.cpp
         src/scene/Scene.cpp
         src/scene/Material.cpp
+        src/scene/MaterialProvider.cpp
 )
 
 if (NOT YamlCpp_LIBS)

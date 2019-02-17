@@ -16,7 +16,7 @@ namespace maths {
         Point &operator=(const Point &p);
         Point &operator=(const Vector &v);
 
-        float dot(const Point &other);
+        float dot(const Point &other) const;
 
         float &operator[](int);
         const float &operator[](int) const;

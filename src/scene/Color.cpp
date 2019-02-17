@@ -5,7 +5,7 @@
 namespace scene {
     Color::Color(float r, float g, float b)
             : _r(r), _g(g), _b(b) {
-
+        this->clamp();
     }
 
     float Color::r() const {
@@ -22,14 +22,17 @@ namespace scene {
 
     void Color::r(float r) {
         this->_r = r;
+        this->clamp();
     }
 
     void Color::g(float g) {
         this->_g = g;
+        this->clamp();
     }
 
     void Color::b(float b) {
         this->_b = b;
+        this->clamp();
     }
 
     Color Color::mul(const Color &c) {

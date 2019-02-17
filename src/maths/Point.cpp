@@ -40,7 +40,7 @@ namespace maths {
         return *this;
     }
 
-    float Point::dot(const Point &other) {
+    float Point::dot(const Point &other) const {
         float product = 0.0f;
         for (int i = 0; i < 3; ++i) {
             product += (*this)[i] * other[i];

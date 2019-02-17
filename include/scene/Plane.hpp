@@ -11,6 +11,8 @@ namespace scene {
 
         bool intersect(const maths::Ray &ray, maths::Point &impact) const override;
         maths::Ray getNormal(const maths::Point &impact, const maths::Point &observator) const override;
+        maths::Point getTextureCoordinates(const maths::Point &p) const override;
+        maths::Point getMaterialCoordinates(const maths::Point &p) const override;
     };
 }
 

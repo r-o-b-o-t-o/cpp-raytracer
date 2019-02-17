@@ -19,7 +19,7 @@ namespace scene {
     maths::Ray Camera::getRay(float x, float y) const {
         // calculer le point de l ecran P en Ref Local
 
-        maths::Point p(2*x -1, 2*y-1, 0);
+        maths::Point p(2.0f * x - 1.0f, 2.0f * y - 1.0f, 0.0f);
         maths::Point f(0.0f, 0.0f, getFocal());
         maths::Vector v(p - f);
 
@@ -47,12 +47,11 @@ namespace scene {
 
         for (auto &light : scene.getAllLights()) {
             auto L = light.getVectorToLight(impact);
-            //std::cout << "VectorToLight :" << L[0] << ","<<L[1]<< "," <<L[2] << std::endl
-            if (this->shadow && scene.isShadow(impact, light))
+            if (this->shadow && scene.isShadow(impact, light)) {
                 continue;
+            }
             auto dot = L.dot(N);
             if (dot > 0.0f) {
-                //std::cout << "dot > 0.0" << std::endl;
                 col += dot * m.getKd().mul(light.getDiffuseColor());
 
                 auto R = 2.0f * dot * N - L;
