@@ -2,6 +2,8 @@
 
 Le programme utlise des scènes au format YAML pour créer une image représentant la scène. Les scènes sont à placer dans le dossier `scenes` à la racine du projet.
 
+
+
 ## Scène
 
 Le fichier détaillant la scène est constitué de plusieurs attributs:
@@ -179,25 +181,44 @@ Les matériaux peuvent utiliser des textures, il suffit de spécifier le chemin 
 
 Des exemple de scènes sont disponibles dans le dossier `scenes`.
 
-## Explication algo
 
-**Illumination** : Phong
 
-**Matrice** : élimination de Gauss-Jordan pour l'inversion
+## Volumes implémentés
 
-## Explication programme
+- `Cube`
+- `Plane`
+- `Sphere`
+- `Square`
+- `Triangle`
+- `Cylinder`
+
+
+
+## Algorithmes utilisés
+
+**Illumination** : Ombrage de Phong
+
+**Matrice** : Élimination de Gauss-Jordan pour l'inversion
+
+
+
+## Fonctionnement du programme
 
 Création de l'image dans la fonction `render()` de la classe `Scene`, utilise `getImpactColor()` de la classe `Camera`.
 
-main : gestion de la GUI, et appel à la fonction `render()` pour une scène donnée.
+`main()` : gestion de la GUI, et appel à la fonction `render()` pour une scène donnée.
 
 Les classes mathématiques (`Point`, `Vector`, `Matrice`, `Ray`) sont dans le dossier `maths` (.cpp dans `src/maths`, .hpp dans `include/maths`) et les classes concernant la scène (`Entity`, `Object`, `Camera`, `Color`, `Material`, ...) sont dans le dossier scene (.cpp dans `src/scene`, .hpp dans `include/scene`).
 
+
+
 ## Répartition des tâches
 
-Axel COCAT ([robot0](https://github.com/robot0)) -> Classes maths (`Ray`, `Point`, `Vector`, `Matrice`, ...), GUI, multithread.
+**Axel COCAT** (*[robot0](https://github.com/robot0)*) : Classes maths (`Ray`, `Point`, `Vector`, `Matrice`, ...), GUI, multithread.
 
-Yohann JERRAIN ([Kryod](https://github.com/Kryod)) -> Classes scène (`Entity`, `Scene`, `Object`, `Square`, `Plane`, `Sphere`, `Camera`, `Light`, ...), ombres, parsing scène -> yaml, readme.
+**Yohann JERRAIN** (*[Kryod](https://github.com/Kryod)*) : Classes scène (`Entity`, `Scene`, `Object`, `Square`, `Plane`, `Sphere`, `Camera`, `Light`, ...), ombres, parsing scène -> yaml, readme.
+
+
 
 ## Bibliothèques utilisées
 
@@ -210,3 +231,5 @@ Yohann JERRAIN ([Kryod](https://github.com/Kryod)) -> Classes scène (`Entity`, 
 - **[ImGui + SFML](https://github.com/eliasdaler/imgui-sfml)**: bindings pour utiliser ImGui avec SFML. _([licence MIT](https://github.com/eliasdaler/imgui-sfml/blob/master/LICENSE))_
 
 - **[tinyfiledialogs](https://sourceforge.net/projects/tinyfiledialogs/)**: dialogues natifs d'enregistrement ou de choix de fichiers, boîtes de messages. _([licence zlib](https://sourceforge.net/directory/license:zlib/))_
+
+- **[yaml-cpp](https://github.com/jbeder/yaml-cpp)**: parsing de YAML _([licence MIT](https://github.com/jbeder/yaml-cpp/blob/master/LICENSE))_

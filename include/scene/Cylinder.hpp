@@ -4,10 +4,10 @@
 #include "Object.hpp"
 
 namespace scene {
-    class Cylindre : public Object {
+    class Cylinder : public Object {
     public:
-        Cylindre() = default;
-        explicit Cylindre(const maths::Point &point);
+        Cylinder() = default;
+        explicit Cylinder(const maths::Point &point);
 
         bool intersect(const maths::Ray &ray, maths::Point &impact) const override;
         maths::Ray getNormal(const maths::Point &impact, const maths::Point &observator) const override;

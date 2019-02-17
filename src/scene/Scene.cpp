@@ -4,7 +4,7 @@
 #include "scene/Cube.hpp"
 #include "scene/Sphere.hpp"
 #include "scene/Triangle.hpp"
-#include "scene/Cylindre.hpp"
+#include "scene/Cylinder.hpp"
 #include "maths/Point.hpp"
 #include "maths/Vector.hpp"
 #include "maths/Ray.hpp"
@@ -169,7 +169,7 @@ namespace scene {
         if (type == "cube") obj = new Cube();
         if (type == "sphere") obj = new Sphere();
         if (type == "triangle") obj = new Triangle();
-        if (type == "cylindre") obj = new Cylindre();
+        if (type == "cylinder") obj = new Cylinder();
 
         if (obj != nullptr) {
             obj->fromYaml(node);

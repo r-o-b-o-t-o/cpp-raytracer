@@ -1,13 +1,13 @@
-#include "scene/Cylindre.hpp"
+#include "scene/Cylinder.hpp"
 
 #include <cmath>
 
 namespace scene {
-    Cylindre::Cylindre(const maths::Point &point) : Object(point) {
+    Cylinder::Cylinder(const maths::Point &point) : Object(point) {
 
     }
 
-    bool Cylindre::intersect(const maths::Ray &ray, maths::Point &impact) const {
+    bool Cylinder::intersect(const maths::Ray &ray, maths::Point &impact) const {
         auto r = this->globalToLocal(ray);
         auto a = powf(r.getVector()[0], 2.0f) + powf(r.getVector()[2], 2.0f);
         auto b = 2.0f * (r.getOrigin()[0] * r.getVector()[0] + r.getOrigin()[2] * r.getVector()[2]);
@@ -40,7 +40,7 @@ namespace scene {
         return true;
     }
 
-    maths::Ray Cylindre::getNormal(const maths::Point &impact, const maths::Point &observator) const {
+    maths::Ray Cylinder::getNormal(const maths::Point &impact, const maths::Point &observator) const {
         auto localImpact = globalToLocal(impact);
         maths::Vector localObs(globalToLocal(observator));
         localObs[1] = 0.0f;
@@ -53,7 +53,7 @@ namespace scene {
         return localToGlobal(nal).normalized();
     }
 
-    maths::Point Cylindre::getTextureCoordinates(const maths::Point &point) const {
+    maths::Point Cylinder::getTextureCoordinates(const maths::Point &point) const {
         auto p = globalToLocal(point);
         auto phi = acosf(p.z());
         auto theta = atan2f(p.y(), p.x());
@@ -64,7 +64,7 @@ namespace scene {
         return p;
     }
 
-    maths::Point Cylindre::getMaterialCoordinates(const maths::Point &point) const {
+    maths::Point Cylinder::getMaterialCoordinates(const maths::Point &point) const {
         auto p = globalToLocal(point);
         auto n = maths::Vector(p).normalized();
         p.x(0.5f + (atan2f(n.x(), n.z()) / (2 * (float)M_PI)));
