@@ -44,10 +44,12 @@ namespace scene {
         auto localImpact = globalToLocal(impact);
         maths::Vector localObs(globalToLocal(observator));
         localObs[1] = 0.0f;
+
         maths::Ray nal(localImpact, maths::Vector(localImpact));
         if (localObs.norm() < 1.0) {
             nal.setVector(-nal.getVector());
         }
+        nal.setVector(maths::Vector(nal.getVector()[0], 0, nal.getVector()[2]));
         return localToGlobal(nal).normalized();
     }
 
