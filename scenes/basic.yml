@@ -1,9 +1,9 @@
-name: "Basic"
+name: "Square scaled and sphere"
 
 light:
   position:
-    x: 2.0
-    y: -3.0
+    x: 1.0
+    y: -2.0
     z: -0.5
   diffuse:
     r: 204.0
@@ -15,6 +15,7 @@ light:
     b: 128.0
 
 camera:
+  shadow: true
   resolution:
     width: 480
     height: 480
@@ -33,7 +34,7 @@ objects:
     type: "sphere"
     position:
       x: 0.0
-      y: 0.0
+      y: -0.5
       z: -0.8
     material:
       ambiant:

@@ -22,10 +22,10 @@ camera:
   focal: 2.0
   position:
     x: 0.0
-    y: -1.
+    y: -1.0
     z: 0.5
   rotation:
-    x: 30.0
+    x: 10.0
     y: 0
     z: 0
 
@@ -60,17 +60,31 @@ objects:
       x: 90
       y: 0.0
       z: 0.0
-    material:
-      ambiant:
-        r: 128
-        g: 25
-        b: 25
-      diffuse:
-        r: 64
-        g: 64
-        b: 64
-      specular:
-        r: 191
-        g: 191
-        b: 191
-      shininess: 3.0
+    materials:
+      - type: "checkerboard"
+      - ambiant:
+          r: 0
+          g: 120
+          b: 214
+        diffuse:
+          r: 64
+          g: 64
+          b: 64
+        specular:
+          r: 191
+          g: 191
+          b: 191
+        shininess: 3.0
+      - ambiant:
+          r: 241
+          g: 79
+          b: 33
+        diffuse:
+          r: 64
+          g: 64
+          b: 64
+        specular:
+          r: 191
+          g: 191
+          b: 191
+        shininess: 3.0
