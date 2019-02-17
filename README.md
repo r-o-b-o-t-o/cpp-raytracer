@@ -1,18 +1,18 @@
 # Raytracer
 
-Le programme utlise des scènes au format YAML pour créer une image représentant la scène. Les scènes sont à placer dans le dossier `scenes`.
+Le programme utlise des scènes au format YAML pour créer une image représentant la scène. Les scènes sont à placer dans le dossier `scenes` à la racine du projet.
 
 ## Scène
 
 Le fichier détaillant la scène est constitué de plusieurs attributs:
 
-- name -> le nom de la scène qui apparait dans le sélecteur de scène et qui sera le nom de l'image générée.
+- `name` -> le nom de la scène qui apparait dans le sélecteur de scènes et qui sera le nom de l'image générée.
 
-- light / lights -> la/les lumière(s) utilisée(s) pour éclairer la scène.
+- `light` / `lights` -> la/les lumière(s) utilisée(s) pour éclairer la scène.
 
-- camera -> la caméra qui enregistre tout ce qu'elle voit dans la scène.
+- `camera` -> la caméra qui enregistre tout ce qu'elle voit dans la scène.
 
-- objects -> les objets de la scène (plane, square, spheres, cubes, ...)
+- `objects` -> les objets de la scène (plane, square, spheres, cubes, ...)
 
 Chacun de ces attributs possède d'autres attributs mais certains leurs sont communs, tels que:
 
@@ -110,7 +110,7 @@ objects:
       shininess: 3.0
 ```
 
-L'attribut materials vient sous deux forme: `material` et `materials`. `materials` permet de specifier deux matériaux à utiliser pour l'objet. Il faut specifier l'attribut type ("checkerboard" ou "stripes" pour damier ou lignes) et ajouter un "-" pour definir les deux matériaux.
+L'attribut materials vient sous deux forme: `material` et `materials`. `materials` permet de specifier deux matériaux à utiliser pour l'objet. Il faut specifier l'attribut `type` ("checkerboard" ou "stripes" pour damier ou lignes) et ajouter un "-" pour definir les deux matériaux.
 
 ```yaml
 objects:
@@ -158,16 +158,20 @@ Des exemple de scènes sont disponibles dans le dossier `scenes`.
 
 ## Explication algo
 
-Illumination : Phong
-Matrice : élimination de Gauss-Jordan pour l'inversion
+**Illumination** : Phong
+
+**Matrice** : élimination de Gauss-Jordan pour l'inversion
 
 ## Explication programme
 
 Création de l'image dans la fonction `render()` de la classe `Scene`, utilise `getImpactColor()` de la classe `Camera`.
-main : setup la GUI, et appel à la fonction `render()` pour une scène donnée.
-Les classes mathématiques (`Point`, `Vector`, `Matrice`, `Ray`) sont dans le dossier `maths` (.cpp -> `src/maths`, .hpp -> `include/maths`) et les classes concernant la scène (`Entity`, `Object`, `Camera`, `Color`, `Material`, ...) sont dans le dossier scene (.cpp -> `src/scene`, .hpp -> `include/scene`).
+
+main : gestion de la GUI, et appel à la fonction `render()` pour une scène donnée.
+
+Les classes mathématiques (`Point`, `Vector`, `Matrice`, `Ray`) sont dans le dossier `maths` (.cpp dans `src/maths`, .hpp dans `include/maths`) et les classes concernant la scène (`Entity`, `Object`, `Camera`, `Color`, `Material`, ...) sont dans le dossier scene (.cpp dans `src/scene`, .hpp dans `include/scene`).
 
 ## Répartition des tâches
 
 Axel COCAT ([robot0](https://github.com/robot0)) -> Classes maths (`Ray`, `Point`, `Vector`, `Matrice`, ...), GUI, multithread.
-Yohann JERRAIN ([Kryod](https://github.com/Kryod)) -> Classes scène (`Entity`, `Scene`, `Object`, `Square`, `Plane`, `Sphere`, `Camera`, `Light`, ...), ombres, parsing scene/yaml, readme.
+
+Yohann JERRAIN ([Kryod](https://github.com/Kryod)) -> Classes scène (`Entity`, `Scene`, `Object`, `Square`, `Plane`, `Sphere`, `Camera`, `Light`, ...), ombres, parsing scène -> yaml, readme.
