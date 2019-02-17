@@ -1,17 +1,17 @@
-#include "scene/Sphere.hpp"
+#include "scene/Cylindre.hpp"
 
 #include <cmath>
 
 namespace scene {
-    Sphere::Sphere(const maths::Point &point) : Object(point) {
+    Cylindre::Cylindre(const maths::Point &point) : Object(point) {
 
     }
 
-    bool Sphere::intersect(const maths::Ray &ray, maths::Point &impact) const {
+    bool Cylindre::intersect(const maths::Ray &ray, maths::Point &impact) const {
         auto r = this->globalToLocal(ray);
-        auto a = powf(r.getVector()[0], 2.0f) + powf(r.getVector()[1], 2.0f) + powf(r.getVector()[2], 2.0f);
-        auto b = 2.0f * (r.getOrigin()[0] * r.getVector()[0] + r.getOrigin()[1] * r.getVector()[1] + r.getOrigin()[2] * r.getVector()[2]);
-        auto c = powf(r.getOrigin()[0], 2.0f) + powf(r.getOrigin()[1], 2.0f) + powf(r.getOrigin()[2], 2.0f) - 1.0f;
+        auto a = powf(r.getVector()[0], 2.0f) + powf(r.getVector()[2], 2.0f);
+        auto b = 2.0f * (r.getOrigin()[0] * r.getVector()[0] + r.getOrigin()[2] * r.getVector()[2]);
+        auto c = powf(r.getOrigin()[0], 2.0f) + powf(r.getOrigin()[2], 2.0f) - 1.0f;
 
         float t;
         auto d = powf(b, 2.0f) - 4.0f * a * c;
@@ -40,9 +40,10 @@ namespace scene {
         return true;
     }
 
-    maths::Ray Sphere::getNormal(const maths::Point &impact, const maths::Point &observator) const {
+    maths::Ray Cylindre::getNormal(const maths::Point &impact, const maths::Point &observator) const {
         auto localImpact = globalToLocal(impact);
         maths::Vector localObs(globalToLocal(observator));
+        localObs[1] = 0.0f;
         maths::Ray nal(localImpact, maths::Vector(localImpact));
         if (localObs.norm() < 1.0) {
             nal.setVector(-nal.getVector());
@@ -50,7 +51,7 @@ namespace scene {
         return localToGlobal(nal).normalized();
     }
 
-    maths::Point Sphere::getTextureCoordinates(const maths::Point &point) const {
+    maths::Point Cylindre::getTextureCoordinates(const maths::Point &point) const {
         auto p = globalToLocal(point);
         auto phi = acosf(p.z());
         auto theta = atan2f(p.y(), p.x());
@@ -61,7 +62,7 @@ namespace scene {
         return p;
     }
 
-    maths::Point Sphere::getMaterialCoordinates(const maths::Point &point) const {
+    maths::Point Cylindre::getMaterialCoordinates(const maths::Point &point) const {
         auto p = globalToLocal(point);
         auto n = maths::Vector(p).normalized();
         p.x(0.5f + (atan2f(n.x(), n.z()) / (2 * (float)M_PI)));

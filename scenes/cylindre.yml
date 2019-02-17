@@ -1,0 +1,56 @@
+name: "Cylindre"
+
+light:
+  position:
+    x: 0.2
+    y: -0.2
+    z: 3.0
+  diffuse:
+    r: 204.0
+    g: 204.0
+    b: 204.0
+  specular:
+    r: 128.0
+    g: 128.0
+    b: 128.0
+
+camera:
+  shadow: true
+  resolution:
+    width: 480
+    height: 480
+  focal: 2.0
+  position:
+    x: 0.0
+    y: 0.0
+    z: 0.5
+  rotation:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+
+objects:
+  triangle:
+    type: "cylindre"
+    position:
+      x: 0.0
+      y: 0.0
+      z: -0.5
+    rotation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    material:
+      ambiant:
+        r: 25
+        g: 128
+        b: 25
+      diffuse:
+        r: 64
+        g: 64
+        b: 64
+      specular:
+        r: 191
+        g: 191
+        b: 191
+      shininess: 3.0
